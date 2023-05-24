@@ -8,5 +8,5 @@ docker_build:
   before_script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
-    - docker build -t jopouradier/fireapp:latest .
-    - docker push jopouradier/fireapp:latest .
+    - docker build . -t jopouradier/fireapp:latest
+    - docker push jopouradier/fireapp:latest
