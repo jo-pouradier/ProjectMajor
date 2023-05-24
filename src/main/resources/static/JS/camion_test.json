@@ -1,0 +1,24 @@
+[
+  {
+  "id": 49,
+  "lon": 4.90952114579701,
+  "lat": 45.73436736068502,
+  "type": "TURNTABLE_LADDER_TRUCK",
+  "liquidType": "ALL",
+  "liquidQuantity": 217,
+  "fuel": 147,
+  "crewMember": 6,
+  "facilityRefID": 33
+},
+  {
+    "id": 49,
+    "lon": 4.90952114579701,
+    "lat": 45.73436736068502,
+    "type": "TURNTABLE_LADDER_TRUCK",
+    "liquidType": "ALL",
+    "liquidQuantity": 217,
+    "fuel": 147,
+    "crewMember": 6,
+    "facilityRefID": 33
+  }
+  ]

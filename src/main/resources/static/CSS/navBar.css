@@ -82,7 +82,7 @@
     }
 
     #check:checked~ul {
-        left: 0%;
+        left: 0;
     }
 
 }
