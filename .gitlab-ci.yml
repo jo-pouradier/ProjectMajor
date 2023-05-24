@@ -1,8 +1,9 @@
 stages:
+  - deploy
   - package
   - build
   - push
-  - deploy
+
 
 docker_deploy:
   image: alpine:latest
@@ -13,7 +14,8 @@ docker_deploy:
     - echo "$LAPTOP_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-#    - ssh-keyscan -p $LAPTOP_SSH_PORT $LAPTOP_SSH_URL >> ~/.ssh/known_hosts
+    - mkdir touch ~/.ssh/known_hosts
+    - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> /.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -p $LAPTOP_SSH_PORT $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "hostname && echo 'Welcome FROM GITLAB CI CD!!!' > welcome.txt"
