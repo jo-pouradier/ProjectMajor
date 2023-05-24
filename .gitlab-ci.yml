@@ -1,13 +1,28 @@
 stages:
+  - package
   - build
 
+job_build_project:
+  image: maven:3-jdk-8
+  stage: package
+  script:
+    - mvn -f pom.xml package
+  artifacts:
+    paths:
+      - ./target/*.jar
+    reports:
+      junit: UserS/UserAPP/target/test-results/*.xml
+
 docker_build:
-  image: docker:19.03.12
+  image: docker:20
   stage: build
   services:
-    - docker:19.03.12-dind
+    - docker:20-dind
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker build -t $CI_REGISTRY/cpelyon/4eti-2022-2023/projet_clbd_g4_2022-2023:latest .
-    - docker push $CI_REGISTRY/cpelyon/4eti-2022-2023/projet_clbd_g4_2022-2023
+    - mkdir target
+    - cp UserS/UserAPP/target/*.jar target/.
+    - cp proxy_server/target/*.jar target/.
+    - docker build -t $CI_REGISTRY/cpelyon/4eti-2022-2023/projet_clbd_g4_2022-2023:latest -f ./Dockerfile .
+    - docker push $CI_REGISTRY/cpelyon/4eti-2022-2023/projet_clbd_g4_2022-2023:latest
