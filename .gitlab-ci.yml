@@ -14,7 +14,7 @@ docker_deploy:
     - echo "$LAPTOP_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - mkdir touch ~/.ssh/known_hosts
+    - touch ~/.ssh/known_hosts
     - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
