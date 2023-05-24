@@ -12,13 +12,14 @@ docker_deploy:
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
     - echo "$LAPTOP_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$LAPTOP_SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - touch ~/.ssh/known_hosts
     - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -p $LAPTOP_SSH_PORT -i gitlab_projet_majeur $LAPTOP_SSH_USER@$LAPTOP_SSH_URL
+    - ssh -p $LAPTOP_SSH_PORT -i ~/.ssh/id_rsa $LAPTOP_SSH_USER@$LAPTOP_SSH_URL
     - echo 'Welcome FROM GITLAB CI CD!!!' > welcome.txt
 
 job_build_project:
