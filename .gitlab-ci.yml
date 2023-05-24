@@ -15,7 +15,7 @@ docker_deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - mkdir touch ~/.ssh/known_hosts
-    - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> /.ssh/known_hosts
+    - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -p $LAPTOP_SSH_PORT $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "hostname && echo 'Welcome FROM GITLAB CI CD!!!' > welcome.txt"
