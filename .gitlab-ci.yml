@@ -1,10 +1,11 @@
-image: docker:20
-
 stages:
   - build
 
 docker_build:
+  image: docker:19.03.12
   stage: build
+  services:
+    - docker:19.03.12-dind
   before_script:
     - docker login -u $DOCKER_REGISTRY_PASSWORD -p $DOCKER_REGISTRY_PASSWORD registry.gitlab.com
   script:
