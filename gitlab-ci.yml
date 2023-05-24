@@ -1,0 +1,9 @@
+stages:
+  - build
+
+docker_build:
+  stage: build
+  script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+    - docker build -t jopouradier/fireapp:latest .
+    - docker push jopouradier/fireapp:latest .
