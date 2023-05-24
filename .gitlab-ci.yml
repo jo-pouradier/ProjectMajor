@@ -19,9 +19,8 @@ docker_deploy:
     - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -p $LAPTOP_SSH_PORT -i ~/.ssh/id_rsa -T $LAPTOP_SSH_USER@$LAPTOP_SSH_URL
-    - echo 'Welcome FROM GITLAB CI CD!!!' > welcome.txt
-
+    - ssh -p $LAPTOP_SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "echo 'Welcome FROM GITLAB CI CD!!!' > welcome.txt"
+    - ssh -p $LAPTOP_SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "cat welcome.txt"
 job_build_project:
   image: maven:3-jdk-8
   stage: package
