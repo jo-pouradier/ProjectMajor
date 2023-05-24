@@ -11,7 +11,7 @@ docker_deploy:
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
-    - echo "$LAPTOP_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+#    - echo "$LAPTOP_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - echo "$LAPTOP_SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 700 ~/.ssh
