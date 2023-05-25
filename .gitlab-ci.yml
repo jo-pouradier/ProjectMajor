@@ -49,6 +49,6 @@ docker_deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
-    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker stop $DOCKER_IMAGE_NAME"
-    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker rm $DOCKER_IMAGE_NAME"
-    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "[ ! "$(docker ps -a | grep <name>)" ] && docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
+    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "[ ! "$(docker ps -a | grep $DOCKER_IMAGE_NAME)" ] && docker stop $DOCKER_IMAGE_NAME"
+    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "[ ! "$(docker ps -a | grep $DOCKER_IMAGE_NAME)" ] && docker rm $DOCKER_IMAGE_NAME"
+    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
