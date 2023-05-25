@@ -48,4 +48,4 @@ docker_deploy:
     - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest && docker stop $DOCKER_IMAGE_NAME && docker rm $DOCKER_IMAGE_NAME && docker run -d --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
+    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest && docker stop $DOCKER_IMAGE_NAME && docker rm $DOCKER_IMAGE_NAME && docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
