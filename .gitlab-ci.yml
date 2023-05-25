@@ -1,8 +1,7 @@
 stages:
-  - deploy
   - package
   - push
-
+  - deploy
 
 job_build_project:
   image: maven:3-jdk-8
