@@ -11,8 +11,8 @@ import java.util.UUID;
 @Service
 public class FacilityService {
 
-    public List<FacilityDto> getAllFacilities() {
-        return RequestsUtils.makeRequest("facility", HttpMethod.GET, null,List.class);
+    public FacilityDto[] getAllFacilities() {
+        return RequestsUtils.makeRequest("facility", HttpMethod.GET, null, FacilityDto[].class);
     }
 
     public FacilityDto addFacility(FacilityDto facilityDto) {
@@ -34,7 +34,8 @@ public class FacilityService {
 
     public static void main(String[] args) {
         FacilityService facilityService = new FacilityService();
-        List<FacilityDto> test = facilityService.getAllFacilities();
+        FacilityDto[] test = facilityService.getAllFacilities();
+        System.out.println(test);
     }
 
 }

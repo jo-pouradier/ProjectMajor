@@ -16,7 +16,7 @@ public class FacilityControler {
 
     @GetMapping(value = "/", produces = "application/json")
     public FacilityDto[] getAllFacilities() {
-        return RequestsUtils.makeRequest("/facility", HttpMethod.GET, null, FacilityDto[].class);
+        return facilityService.getAllFacilities();
     }
 
     @PostMapping(value = "/", produces = "application/json")
