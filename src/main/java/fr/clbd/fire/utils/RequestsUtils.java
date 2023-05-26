@@ -1,11 +1,12 @@
 package fr.clbd.fire.utils;
 
+import com.project.model.dto.FireDto;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
-public class requests {
+public class RequestsUtils {
     final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
     /**
     * @param <T> Response type
@@ -30,6 +31,10 @@ public class requests {
             System.out.println("Erreur dans la requête : " + e.getMessage());
         }
 
+        return null;
+    }
+    
+    public static FireDto getAllFires(){
         return null;
     }
 }

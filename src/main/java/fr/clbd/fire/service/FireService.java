@@ -1,6 +1,6 @@
 package fr.clbd.fire.service;
 
-import fr.clbd.fire.model.dto.FireDto;
+import com.project.model.dto.FireDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,3 +24,4 @@ public class FireService {
         return null;
     }
 }
+
