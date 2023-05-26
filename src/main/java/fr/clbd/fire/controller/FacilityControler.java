@@ -30,13 +30,13 @@ public class FacilityControler {
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public FacilityDto getFacility(@PathVariable("id") String id) {
-        return facilityService.getFacility(UUID.fromString(id));
+    public FacilityDto getFacility(@PathVariable("id") int id) {
+        return facilityService.getFacility(id);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public boolean delFacility(@PathVariable("id") String id) {
-        return facilityService.delFacility(UUID.fromString(id));
+    public boolean delFacility(@PathVariable("id") int id) {
+        return facilityService.delFacility(id);
     }
 
 }
