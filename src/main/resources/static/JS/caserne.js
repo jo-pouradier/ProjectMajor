@@ -12,11 +12,11 @@ function aff_Camion(Camions) {
             .replace(/{{type}}/g, C.type)
             .replace(/{{lon}}/g, C.lon)
             .replace(/{{lat}}/g, C.lat)
-            .replace(/{{liquideType}}/g, C.liquideType)
-            .replace(/{{liquideQuantity}}/g, C.liquideQuantity)
+            .replace(/{{liquideType}}/g, C.liquidType)
+            .replace(/{{liquideQuantity}}/g, C.liquidQuantity)
             .replace(/{{fuel}}/g, C.fuel)
             .replace(/{{crewMember}}/g, C.crewMember)
-            .replace(/{{facilityRefId}}/g, C.facilityRefId)
+            .replace(/{{facilityRefId}}/g, C.facilityRefID)
 
         clone.firstElementChild.innerHTML = newContent2
         template.parentNode.appendChild(clone)}

@@ -5,6 +5,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+
 
 }
 
@@ -15,7 +17,6 @@
     align-items: center;
     line-height: 5rem;
     color: #fff;
-    font-family: 'Ubuntu', sans-serif;
 }
 
 .left h1 {
