@@ -1,6 +1,6 @@
 package fr.clbd.fire.model;
 
-public enum VehicleType {
+public enum VehiculeType {
 	// https://lemonbin.com/types-of-fire-trucks/
 	CAR(2, 2, 1, 10, 0.1F, 50, 5, 150.0F),
 	FIRE_ENGINE(4, 4, 5, 50, 0.5F, 60, 10, 110.0F),
@@ -18,8 +18,8 @@ public enum VehicleType {
 	private float fuelConsumption; // per km
 	private float maxSpeed; // Km/Hour
 
-	private VehicleType(int spaceUsedInFacility, int vehicleCrewCapacity, float efficiency,
-						float liquidCapacity, float liquidConsumption, float fuelCapacity, float fuelConsumption, float maxSpeed) {
+	private VehiculeType(int spaceUsedInFacility, int vehicleCrewCapacity, float efficiency,
+						 float liquidCapacity, float liquidConsumption, float fuelCapacity, float fuelConsumption, float maxSpeed) {
 		this.spaceUsedInFacility = spaceUsedInFacility;
 		this.vehicleCrewCapacity = vehicleCrewCapacity;
 		this.liquidCapacity = liquidCapacity;

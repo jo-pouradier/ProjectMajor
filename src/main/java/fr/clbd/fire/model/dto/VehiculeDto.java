@@ -1,28 +1,28 @@
 package fr.clbd.fire.model.dto;
 
 import fr.clbd.fire.model.LiquidType;
-import fr.clbd.fire.model.VehicleType;
+import fr.clbd.fire.model.VehiculeType;
 
-public class VehicleDto {
+public class VehiculeDto {
 	public static final int CREW_MEMBER_START_VALUE = -1;
 	private Integer id;
 	private double lon;
 	private double lat;
-	private VehicleType type;
+	private VehiculeType type;
 	private LiquidType liquidType; // type of liquid effective to type of fire
 	private float liquidQuantity; // total quantity of liquid
 	private float fuel;        // total quantity of fuel
 	private int crewMember;
 	private Integer facilityRefID;
 
-	public VehicleDto() {
+	public VehiculeDto() {
 		crewMember = CREW_MEMBER_START_VALUE;
 		liquidType = LiquidType.ALL;
 	}
 
-	public VehicleDto(int id, double lon, double lat, VehicleType type,
-					  LiquidType liquidType, float liquidQuantity, float fuel,
-					  int crewMember, Integer facilityRefID) {
+	public VehiculeDto(int id, double lon, double lat, VehiculeType type,
+					   LiquidType liquidType, float liquidQuantity, float fuel,
+					   int crewMember, Integer facilityRefID) {
 		super();
 		this.id = id;
 		this.lon = lon;
@@ -51,11 +51,11 @@ public class VehicleDto {
 		this.lat = lat;
 	}
 
-	public VehicleType getType() {
+	public VehiculeType getType() {
 		return type;
 	}
 
-	public void setType(VehicleType type) {
+	public void setType(VehiculeType type) {
 		this.type = type;
 	}
 

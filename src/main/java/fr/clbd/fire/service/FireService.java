@@ -1,10 +1,12 @@
 package fr.clbd.fire.service;
 
 import fr.clbd.fire.model.dto.FireDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class FireService {
 
     public List<FireDto> getFires() {
