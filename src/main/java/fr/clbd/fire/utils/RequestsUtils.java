@@ -118,9 +118,9 @@ public class RequestsUtils {
         System.out.println("Notre facility:" + ownedFacility.getId()+" "+ownedFacility.getLat() + ":"+ ownedFacility.getLon());
         FireDto[] fires = getAllFires();
 
-        for(FireDto fire : fires){
+        for(FireDto fire : fires) {
 
-
+        }
 
 //        VehicleType type = VehicleType.CAR;
 //        VehicleDto vehicleDto = new VehicleDto();
