@@ -5,10 +5,10 @@ import org.springframework.web.client.RestTemplate;
 
 
 public class requests {
-    final String baseUrl = "http://vps.cpe-sn.fr:8081/";
-    RestTemplate restTemplate = new RestTemplate();
+    final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
 
-    public String makeRequest(String url, HttpMethod method, HttpEntity<String> entity) {
+    public static String makeRequest(String url, HttpMethod method, HttpEntity<String> entity) {
+        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(baseUrl + url, method, entity, String.class);
         return response.getBody();
     }

@@ -1,7 +1,9 @@
 package fr.clbd.fire.service;
 
 import fr.clbd.fire.model.dto.FacilityDto;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import fr.clbd.fire.utils.requests;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +12,8 @@ import java.util.UUID;
 public class FacilityService {
 
     public List<FacilityDto> getAllFacilities() {
-        //TODO ???
+        String response = requests.makeRequest("facilities", HttpMethod.GET, null);
+        System.out.println(response);
         return null;
     }
 
@@ -30,5 +33,10 @@ public class FacilityService {
     }
 
     // TODO get facility OBJECT
+
+    public static void main(String[] args) {
+        FacilityService facilityService = new FacilityService();
+        facilityService.getAllFacilities();
+    }
 
 }

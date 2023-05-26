@@ -20,8 +20,8 @@ public class VehicleDto {
 		liquidType = LiquidType.ALL;
 	}
 
-	public VehicleDto(int id, double lon, double lat, com.project.model.dto.VehicleType type,
-					  com.project.model.dto.LiquidType liquidType, float liquidQuantity, float fuel,
+	public VehicleDto(int id, double lon, double lat, VehicleType type,
+					  LiquidType liquidType, float liquidQuantity, float fuel,
 					  int crewMember, Integer facilityRefID) {
 		super();
 		this.id = id;
