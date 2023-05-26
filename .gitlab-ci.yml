@@ -13,6 +13,8 @@ job_build_project:
       - ./target/*.jar
     reports:
       junit: ./target/test-results/*.xml
+  only:
+    - bot
 
 #docker_build:
 #  image: docker:20
@@ -35,6 +37,8 @@ docker_push:
   script:
     - docker build -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest -f ./Dockerfile .
     - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest
+  only:
+    - bot
 
 docker_deploy:
   image: alpine:latest
@@ -48,11 +52,7 @@ docker_deploy:
     - echo "$LAPTOP_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-#    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL  "echo test >> test.txt && exit"
-#    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL
-#    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
-#    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker stop $DOCKER_IMAGE_NAME"
-#    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker rm $DOCKER_IMAGE_NAME"
-#    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
-     - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest && (docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker stop $DOCKER_IMAGE_NAME && docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker rm $DOCKER_IMAGE_NAME) || true && docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
+    - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest && (docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker stop $DOCKER_IMAGE_NAME && docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker rm $DOCKER_IMAGE_NAME) || true && docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
+  only:
+    - bot
 
