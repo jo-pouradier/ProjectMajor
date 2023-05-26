@@ -9,7 +9,7 @@ import java.util.UUID;
 @Service
 public class FireService {
 
-    public List<FireDto> getFires() {
+    public FireDto[] getAllFires() {
         // TODO
         return null;
     }

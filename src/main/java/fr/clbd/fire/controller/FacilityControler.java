@@ -1,11 +1,13 @@
 package fr.clbd.fire.controller;
 
+import com.project.model.dto.FacilityDto;
 import fr.clbd.fire.service.FacilityService;
+import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/facility")
@@ -15,9 +17,28 @@ public class FacilityControler {
     private FacilityService facilityService;
 
     @GetMapping(value = "/", produces = "application/json")
-    public HttpStatus getStatus() {
-        return HttpStatus.OK;
+    public FacilityDto[] getAllFacilities() {
+        return facilityService.getAllFacilities();
     }
 
+    @PostMapping(value = "/", produces = "application/json")
+    public FacilityDto addFacility(@RequestBody FacilityDto facilityDto) {
+        return facilityService.addFacility(facilityDto);
+    }
+
+    @DeleteMapping(value = "/", produces = "application/json")
+    public boolean delAllFacilities() {
+        return facilityService.delAllFacilities();
+    }
+
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public FacilityDto getFacility(@PathVariable("id") String id) {
+        return facilityService.getFacility(UUID.fromString(id));
+    }
+
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public boolean delFacility(@PathVariable("id") String id) {
+        return facilityService.delFacility(UUID.fromString(id));
+    }
 
 }
