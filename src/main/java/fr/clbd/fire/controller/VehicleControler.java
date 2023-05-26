@@ -19,7 +19,10 @@ public class VehicleControler {
     public VehicleDto[] getTeamVehicle() {
         return vehicleService.getTeamVehicles();
     }
-
+    @GetMapping(value = "/getVehicle", produces = "application/json")
+    public VehicleDto getVehicle(int Id) {
+        return vehicleService.getVehicle(Id);
+    }
     @GetMapping(value = "/getAllVehicle", produces = "application/json")
     public VehicleDto[] getAllVehicle() {
         return vehicleService.getAllVehicles();
@@ -36,8 +39,8 @@ public class VehicleControler {
     }
 
     @DeleteMapping(value = "/delVehicle", produces = "application/json")
-    public boolean delVehicle(UUID uuid){
-        return vehicleService.delVehicle(uuid);
+    public boolean delVehicle(int id){
+        return vehicleService.delVehicle(id);
     }
 
     @PutMapping(value = "/updateVehicle", produces = "application/json")

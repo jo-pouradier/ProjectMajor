@@ -13,42 +13,40 @@ import java.util.UUID;
 @Service
 public class VehicleService {
     public VehicleDto[] getTeamVehicles() {
-        return RequestsUtils.makeRequest("/vehiclebyteam/" + teamId, HttpMethod.GET, null, VehicleDto[].class);
+        return RequestsUtils.getTeamVehicles();
+    }
+
+    public VehicleDto getVehicle(int id) {
+        return RequestsUtils.getVehicle(id);
     }
 
     public VehicleDto[] getAllVehicles() {
-        // TODO
-        return null;
+        return RequestsUtils.getAllVehicles();
     }
 
     public VehicleDto addVehicle(VehicleDto VehicleDto) {
-        // TODO
-        return null;
+        return RequestsUtils.addVehicle(VehicleDto);
     }
 
     public boolean delAllVehicles() {
-        // TODO
-        return false;
+        return RequestsUtils.delAllVehicles();
     }
 
-    public boolean delVehicle(UUID id) {
-        // TODO
-        return false;
+    public boolean delVehicle(int id) {
+        return RequestsUtils.delVehicle(id);
     }
 
-    public VehicleDto updateVehicle(VehicleDto VehicleDto) {
-        // TODO
-        return null;
+    public VehicleDto updateVehicle(int id, VehicleDto VehicleDto) {
+        return RequestsUtils.updateVehicle(id, VehicleDto);
     }
 
-    public VehicleDto moveVehicle(UUID VehicleId, Coord coord) {
-        // TODO
-        return null;
+    public VehicleDto moveVehicle(int VehicleId, Coord coord) {
+        return RequestsUtils.moveVehicle(VehicleId, coord);
     }
 
     public static void main(String[] args) {
         VehicleService VehicleService = new VehicleService();
         //VehicleDto[] test = VehicleService.getTeamVehicles(UUID.fromString("9b229cdd-42af-4fbc-845b-07c36b9fba30"));
-        System.out.println(Arrays.toString(test));
+        //System.out.println(Arrays.toString(test));
     }
 }

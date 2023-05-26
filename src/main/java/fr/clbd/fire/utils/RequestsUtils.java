@@ -68,8 +68,23 @@ public class RequestsUtils {
 
 
     // ------ VEHICLE --------
+    public static VehicleDto[] getTeamVehicles() {
+        return makeRequest("/vehiclebyteam/" + uuid, VehicleDto[].class);
+    }
     public static VehicleDto getVehicle(int id) {
-        return makeRequest("/vehicle/" + id, VehicleDto.class);
+        return makeRequest("/vehicle/" + id,VehicleDto.class);
+    }
+
+    public static VehicleDto[] getAllVehicles() {
+        return makeRequest("/vehicle", VehicleDto[].class);
+    }
+
+    public static boolean delAllVehicles() {
+        return Boolean.TRUE.equals(makeRequest("/vehicle", HttpMethod.DELETE, null, Boolean.class));
+    }
+
+    public static boolean delVehicle(int id) {
+        return Boolean.TRUE.equals(makeRequest("/vehicle/" + id, HttpMethod.DELETE, null, Boolean.class));
     }
 
     public static VehicleDto addVehicle(VehicleDto vehicleDto) {
@@ -77,9 +92,11 @@ public class RequestsUtils {
     }
 
     public static VehicleDto moveVehicle(int id, Coord coord) {
-        return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.POST, coord, VehicleDto.class);
+        return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.PUT, coord, VehicleDto.class);
     }
-
+    public static VehicleDto updateVehicle(int id, VehicleDto vehicleDto) {
+        return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.PUT, vehicleDto, VehicleDto.class);
+    }
 
     public static void main(String[] args) {
         FacilityDto[] facilities = getFacilities();
