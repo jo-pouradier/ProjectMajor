@@ -8,14 +8,25 @@ import org.springframework.web.client.RestTemplate;
 
 public class RequestsUtils {
     final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
+
     /**
-    * @param <T> Response type
-    * @param <U> body type as dtos
-    */
+     * @param <T> Response type
+     * @param <U> body type as dtos
+     */
 
     public static <T, U> T makeRequest(String url, Class<T> responseType) {
-        return RequestsUtils.makeRequest(url, HttpMethod.GET, null,responseType);
+        return RequestsUtils.makeRequest(url, HttpMethod.GET, null, responseType);
     }
+
+    /**
+     * @param url          url path
+     * @param method       http method
+     * @param body         body to send
+     * @param responseType response type wanted
+     * @param <T>          class of response
+     * @param <U>          class of body
+     * @return response body
+     */
     public static <T, U> T makeRequest(String url, HttpMethod method, U body, Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
         try {
