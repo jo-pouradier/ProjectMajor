@@ -12,7 +12,7 @@ import java.util.UUID;
 public class FacilityService {
 
     public List<FacilityDto> getAllFacilities() {
-        String response = requests.makeRequest("facility", HttpMethod.GET, null);
+        List<FacilityDto> response = requests.makeRequest("facility", HttpMethod.GET, null,List.class);
         System.out.println(response);
         return null;
     }
