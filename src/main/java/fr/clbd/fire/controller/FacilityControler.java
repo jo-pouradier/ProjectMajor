@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/facility")
 public class FacilityControler {
@@ -20,23 +22,23 @@ public class FacilityControler {
     }
 
     @PostMapping(value = "/", produces = "application/json")
-    public FacilityDto addFacility(FacilityDto facilityDto) {
-        return RequestsUtils.makeRequest("/facility", HttpMethod.POST, facilityDto, FacilityDto.class);
+    public FacilityDto addFacility(@RequestBody FacilityDto facilityDto) {
+        return facilityService.addFacility(facilityDto);
     }
 
     @DeleteMapping(value = "/", produces = "application/json")
     public boolean delAllFacilities() {
-        return Boolean.TRUE.equals(RequestsUtils.makeRequest("/facility", HttpMethod.DELETE, null, Boolean.class));
+        return facilityService.delAllFacilities();
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public FacilityDto getFacility(@PathVariable("id") String id) {
-        return RequestsUtils.makeRequest("/facility/" + id, HttpMethod.GET, null, FacilityDto.class);
+        return facilityService.getFacility(UUID.fromString(id));
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public boolean delFacility(@PathVariable("id") String id) {
-        return Boolean.TRUE.equals(RequestsUtils.makeRequest("/facility/" + id, HttpMethod.DELETE, null, Boolean.class));
+        return facilityService.delFacility(UUID.fromString(id));
     }
 
 }

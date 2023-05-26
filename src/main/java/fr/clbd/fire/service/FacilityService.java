@@ -25,6 +25,11 @@ public class FacilityService {
         return false;
     }
 
+    public boolean delFacility(UUID id) {
+        //TODO ???
+        return false;
+    }
+
     public FacilityDto getFacility(UUID id) {
         //TODO ???
         return null;
