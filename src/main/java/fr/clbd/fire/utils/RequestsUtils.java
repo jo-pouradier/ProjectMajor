@@ -6,7 +6,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
-public class requests {
+public class RequestsUtils {
     final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
     /**
     * @param <T> Response type
@@ -34,7 +34,7 @@ public class requests {
         return null;
     }
     
-    public FireDto getAllFires(){
+    public static FireDto getAllFires(){
         return null;
     }
 }

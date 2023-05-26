@@ -3,7 +3,7 @@ package fr.clbd.fire.service;
 import fr.clbd.fire.model.Coord;
 import fr.clbd.fire.model.dto.FacilityDto;
 import fr.clbd.fire.model.dto.VehiculeDto;
-import fr.clbd.fire.utils.requests;
+import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Service
 public class VehiculeService {
     public List<VehiculeDto> getTeamVehicules(UUID teamId) {
-        return requests.makeRequest("/vehiclebyteam/" + teamId, HttpMethod.GET, null,List.class);
+        return RequestsUtils.makeRequest("/vehiclebyteam/" + teamId, HttpMethod.GET, null,List.class);
     }
 
     public VehiculeDto getAllVehicules() {
