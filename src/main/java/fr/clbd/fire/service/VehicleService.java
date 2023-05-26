@@ -1,7 +1,7 @@
 package fr.clbd.fire.service;
 
+import com.project.model.dto.Coord;
 import com.project.model.dto.VehicleDto;
-import fr.clbd.fire.model.Coord;
 import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
