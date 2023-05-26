@@ -2,8 +2,6 @@ package fr.clbd.fire.service;
 
 import com.project.model.dto.FireDto;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.UUID;
 
 @Service

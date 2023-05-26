@@ -2,9 +2,7 @@ package fr.clbd.fire.controller;
 
 import com.project.model.dto.FacilityDto;
 import fr.clbd.fire.service.FacilityService;
-import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;

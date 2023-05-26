@@ -1,7 +1,6 @@
 package fr.clbd.fire.utils;
 
 import com.project.model.dto.*;
-import fr.clbd.fire.model.Facility;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -12,9 +11,9 @@ import java.util.Arrays;
 public class RequestsUtils {
     final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
 
-    private static String uuid = "9b229cdd-42af-4fbc-845b-07c36b9fba30";
+    private static final String uuid = "9b229cdd-42af-4fbc-845b-07c36b9fba30";
 
-    private static String teamName = "Fa Triangle (v4)";
+    private static final String teamName = "Fa Triangle (v4)";
     /**
     * @param <T> Response type
     * @param <U> body type as dtos
