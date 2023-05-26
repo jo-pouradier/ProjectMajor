@@ -1,6 +1,5 @@
 package fr.clbd.fire.service;
 
-<<<<<<< HEAD
 import fr.clbd.fire.model.dto.FireDto;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,5 @@ public class FireService {
         // TODO
         return null;
     }
-=======
-public class FireService {
->>>>>>> 94f17cf (init 2)
 }
+
