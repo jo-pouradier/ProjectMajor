@@ -1,5 +1,6 @@
 package fr.clbd.fire.utils;
 
+import com.project.model.dto.FireDto;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +31,10 @@ public class requests {
             System.out.println("Erreur dans la requête : " + e.getMessage());
         }
 
+        return null;
+    }
+    
+    public FireDto getAllFires(){
         return null;
     }
 }
