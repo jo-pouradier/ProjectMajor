@@ -44,13 +44,13 @@ public class VehicleControler {
     }
 
     @PutMapping(value = "/updateVehicle", produces = "application/json")
-    public VehicleDto updateVehicle(VehicleDto vehicleDto){
-        return vehicleService.updateVehicle(vehicleDto);
+    public VehicleDto updateVehicle(int id,VehicleDto vehicleDto){
+        return vehicleService.updateVehicle(id,vehicleDto);
     }
 
     @PutMapping(value = "/moveVehicle", produces = "application/json")
-    public VehicleDto moveVehicle(UUID uuid, Coord coord){
-        return vehicleService.moveVehicle(uuid, coord);
+    public VehicleDto moveVehicle(int id, Coord coord){
+        return vehicleService.moveVehicle(id, coord);
     }
 
 }

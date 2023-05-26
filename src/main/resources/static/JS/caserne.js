@@ -1,9 +1,9 @@
-function aff_Camion(Camions) {
+async function aff_Camion(Camions) {
 
     let template = document.getElementById('Camions');
 
 
-
+    console.log(Camions)
     for (const C of Camions) { // itère sur le tableau
 
         let clone = document.importNode(template.content, true);      // clone le template
@@ -24,10 +24,10 @@ function aff_Camion(Camions) {
 }
 
 async function affichage_camions() {
-    const response = await fetch("JS/camion_test.json");
+    let response = (await fetch("/vehicle/getTeamVehicle"));
     const camions_json = await response.json();
     console.log(camions_json)
-    aff_Camion(camions_json);
+    await aff_Camion(camions_json);
 }
 
 $(document).ready(function () {
