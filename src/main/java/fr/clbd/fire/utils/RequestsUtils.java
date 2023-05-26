@@ -4,9 +4,7 @@ import com.project.model.dto.*;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.Arrays;
-
 
 public class RequestsUtils {
     final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
@@ -40,26 +38,47 @@ public class RequestsUtils {
         }
         return null;
     }
-    
-    public static FireDto[] getAllFires(){
+
+    // ------ FIRE --------
+    public static FireDto[] getAllFires() {
         return makeRequest("/fires", FireDto[].class);
     }
 
-    public static FacilityDto[] getFacilities(){
+    // ------ FACILITY --------
+    public static FacilityDto[] getFacilities() {
         return makeRequest("/facility", FacilityDto[].class);
     }
 
-    public static VehicleDto addVehicle(VehicleDto vehicleDto){
-        return makeRequest("/vehicle/"+uuid, HttpMethod.POST, vehicleDto, VehicleDto.class);
+    public static FacilityDto getFacility(int id) {
+        return makeRequest("/facility/" + id, FacilityDto.class);
     }
 
-    public static VehicleDto getVehicle(int id){
-        return makeRequest("/vehicle/"+id, VehicleDto.class);
+    public static FacilityDto addFacility(FacilityDto facilityDto) {
+        return makeRequest("/facility/" + uuid, HttpMethod.POST, facilityDto, FacilityDto.class);
     }
 
-    public static VehicleDto moveVehicle(int id, Coord coord){
-        return makeRequest("/vehicle/"+uuid+"/"+id, HttpMethod.POST, coord,VehicleDto.class);
+    public static boolean delAllFacilities() {
+        return Boolean.TRUE.equals(makeRequest("/facility", HttpMethod.DELETE, null, Boolean.class));
     }
+
+    public static boolean delFacility(int id) {
+        return Boolean.TRUE.equals(makeRequest("/facility/" + id, HttpMethod.DELETE, null, Boolean.class));
+    }
+
+
+    // ------ VEHICLE --------
+    public static VehicleDto getVehicle(int id) {
+        return makeRequest("/vehicle/" + id, VehicleDto.class);
+    }
+
+    public static VehicleDto addVehicle(VehicleDto vehicleDto) {
+        return makeRequest("/vehicle/" + uuid, HttpMethod.POST, vehicleDto, VehicleDto.class);
+    }
+
+    public static VehicleDto moveVehicle(int id, Coord coord) {
+        return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.POST, coord, VehicleDto.class);
+    }
+
 
     public static void main(String[] args) {
         FacilityDto[] facilities = getFacilities();

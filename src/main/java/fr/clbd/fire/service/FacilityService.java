@@ -2,40 +2,30 @@ package fr.clbd.fire.service;
 
 import com.project.model.dto.FacilityDto;
 import fr.clbd.fire.utils.RequestsUtils;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class FacilityService {
 
     public FacilityDto[] getAllFacilities() {
-        return RequestsUtils.makeRequest("facility", HttpMethod.GET, null, FacilityDto[].class);
+        return RequestsUtils.getFacilities();
     }
 
     public FacilityDto addFacility(FacilityDto facilityDto) {
-        //TODO ???
-        return null;
+        return RequestsUtils.addFacility(facilityDto);
     }
 
     public boolean delAllFacilities() {
-        //TODO ???
-        return false;
+        return RequestsUtils.delAllFacilities();
     }
 
-    public boolean delFacility(UUID id) {
-        //TODO ???
-        return false;
+    public boolean delFacility(int id) {
+        return Boolean.TRUE.equals(RequestsUtils.delFacility(id));
     }
 
-    public FacilityDto getFacility(UUID id) {
-        //TODO ???
-        return null;
+    public FacilityDto getFacility(int id) {
+        return RequestsUtils.getFacility(id);
     }
-
-    // TODO get facility OBJECT
 
     public static void main(String[] args) {
         FacilityService facilityService = new FacilityService();
