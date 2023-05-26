@@ -1,8 +1,7 @@
 package fr.clbd.fire.service;
 
+import com.project.model.dto.VehicleDto;
 import fr.clbd.fire.model.Coord;
-import fr.clbd.fire.model.dto.FacilityDto;
-import fr.clbd.fire.model.dto.VehiculeDto;
 import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -12,16 +11,16 @@ import java.util.UUID;
 
 @Service
 public class VehiculeService {
-    public List<VehiculeDto> getTeamVehicules(UUID teamId) {
+    public List<VehicleDto> getTeamVehicules(UUID teamId) {
         return RequestsUtils.makeRequest("/vehiclebyteam/" + teamId, HttpMethod.GET, null,List.class);
     }
 
-    public VehiculeDto getAllVehicules() {
+    public VehicleDto getAllVehicules() {
         // TODO
         return null;
     }
 
-    public VehiculeDto addVehicule(UUID teamId, VehiculeDto vehiculeDto) {
+    public VehicleDto addVehicule(UUID teamId, VehicleDto vehiculeDto) {
         // TODO
         return null;
     }
@@ -36,18 +35,18 @@ public class VehiculeService {
         return false;
     }
 
-    public VehiculeDto updateVehicule(UUID teamId, VehiculeDto vehiculeDto) {
+    public VehicleDto updateVehicule(UUID teamId, VehicleDto vehiculeDto) {
         // TODO
         return null;
     }
 
-    public VehiculeDto moveVehicule(UUID teamId, UUID vehiculeId, Coord coord) {
+    public VehicleDto moveVehicule(UUID teamId, UUID vehiculeId, Coord coord) {
         // TODO
         return null;
     }
     public static void main(String[] args) {
         VehiculeService vehiculeService = new VehiculeService();
-        List<VehiculeDto> test = vehiculeService.getTeamVehicules(UUID.fromString("9b229cdd-42af-4fbc-845b-07c36b9fba30"));
+        List<VehicleDto> test = vehiculeService.getTeamVehicules(UUID.fromString("9b229cdd-42af-4fbc-845b-07c36b9fba30"));
         System.out.println(test);
     }
 }

@@ -1,9 +1,9 @@
 package fr.clbd.fire.service;
 
-import fr.clbd.fire.model.dto.FacilityDto;
+import com.project.model.dto.FacilityDto;
+import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import fr.clbd.fire.utils.RequestsUtils;
 
 import java.util.List;
 import java.util.UUID;

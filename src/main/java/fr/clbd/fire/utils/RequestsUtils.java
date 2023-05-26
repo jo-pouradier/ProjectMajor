@@ -13,7 +13,9 @@ public class RequestsUtils {
     * @param <U> body type as dtos
     */
 
-
+    public static <T, U> T makeRequest(String url, Class<T> responseType) {
+        return RequestsUtils.makeRequest(url, HttpMethod.GET, null,responseType);
+    }
     public static <T, U> T makeRequest(String url, HttpMethod method, U body, Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
         try {
@@ -30,11 +32,10 @@ public class RequestsUtils {
         } catch (RestClientException e) {
             System.out.println("Erreur dans la requête : " + e.getMessage());
         }
-
         return null;
     }
     
-    public static FireDto getAllFires(){
-        return null;
+    public static FireDto[] getAllFires(){
+        return makeRequest("/fires", FireDto[].class);
     }
 }

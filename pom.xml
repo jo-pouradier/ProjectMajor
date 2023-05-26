@@ -15,7 +15,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	
-	<name>UserApp</name>
+	<name>FireApp</name>
 	<description>Project Sample for using Springboot</description>
 
 	<properties>
@@ -32,13 +32,8 @@
 	<distributionManagement>
 		<repository>
 			<id>gitlab-maven</id>
-			<url>https://gitlab.com/api/v4/projects/14132618/packages/maven</url>
+			<url>https://gitlab.com/api/v4/projects/14890148/packages/maven</url>
 		</repository>
-
-		<snapshotRepository>
-			<id>gitlab-maven</id>
-			<url>https://gitlab.com/api/v4/projects/14132618/packages/maven</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 	<dependencies>
