@@ -44,4 +44,3 @@ docker_deploy:
     - ssh -p $LAPTOP_SSH_PORT -i $LAPTOP_SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $LAPTOP_SSH_USER@$LAPTOP_SSH_URL "docker pull $DOCKER_REGISTRY/$DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest && (docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker stop $DOCKER_IMAGE_NAME && docker container inspect $DOCKER_IMAGE_NAME >/dev/null 2>&1 && docker rm $DOCKER_IMAGE_NAME) || true && docker run -itd --name $DOCKER_IMAGE_NAME -p 8090:80 $DOCKER_REGISTRY_USER/$DOCKER_IMAGE_NAME:latest"
   only:
     - bot
-
