@@ -2,17 +2,20 @@ package fr.clbd.fire.utils;
 
 import com.project.model.dto.*;
 import com.project.tools.GisTools;
+import fr.clbd.fire.model.Facility;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.Arrays;
+
 
 public class RequestsUtils {
     final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
 
-    private static final String uuid = "9b229cdd-42af-4fbc-845b-07c36b9fba30";
+    private static String uuid = "9b229cdd-42af-4fbc-845b-07c36b9fba30";
 
-    private static final String teamName = "Fa Triangle (v4)";
+    private static String teamName = "Fa Triangle (v4)";
     /**
     * @param <T> Response type
     * @param <U> body type as dtos
@@ -112,19 +115,33 @@ public class RequestsUtils {
            return facilityDto.getName().equals(RequestsUtils.teamName);
         }).findFirst().get();
 
-        System.out.println("Notre facility:" + ownedFacility.getLat() + ":"+ ownedFacility.getLon());
+        System.out.println("Notre facility:" + ownedFacility.getId()+" "+ownedFacility.getLat() + ":"+ ownedFacility.getLon());
+        FireDto[] fires = getAllFires();
+
+        for(FireDto fire : fires){
 
 
-        VehicleDto vehicleDto = new VehicleDto();
-        vehicleDto.setCrewMember(6);
-        vehicleDto.setLat(ownedFacility.getLat());
-        vehicleDto.setLon(ownedFacility.getLon());
-        vehicleDto.setFacilityRefID(ownedFacility.getId());
-        vehicleDto.setType(VehicleType.TURNTABLE_LADDER_TRUCK);
-        vehicleDto.setFuel(VehicleType.TURNTABLE_LADDER_TRUCK.getFuelCapacity());
-        vehicleDto.setLiquidQuantity(VehicleType.TURNTABLE_LADDER_TRUCK.getLiquidCapacity());
-        VehicleDto createVehicle = addVehicle(vehicleDto);
-        System.out.println(createVehicle);
+
+//        VehicleType type = VehicleType.CAR;
+//        VehicleDto vehicleDto = new VehicleDto();
+//        vehicleDto.setCrewMember(1);
+//        vehicleDto.setLat(ownedFacility.getLat());
+//        vehicleDto.setLon(ownedFacility.getLon());
+//        vehicleDto.setFacilityRefID(ownedFacility.getId());
+//        vehicleDto.setType(type);
+//        vehicleDto.setFuel(type.getFuelCapacity());
+//        vehicleDto.setLiquidQuantity(type.getLiquidCapacity());
+        VehicleDto car = getVehicle(3800);
+        System.out.println(car.getLat()+" " + car.getLon());
+        car = moveVehicle(car.getId(), new Coord());
+        System.out.println(car.getLat()+" " + car.getLon());
+        int distance = GisTools.computeDistance2(new Coord(car.getLon(),car.getLat()), new Coord(ownedFacility.getLon(), ownedFacility.getLat()));
+
+        System.out.println(distance);
+        VehicleDto createVehicle = getVehicle(3799);
+        int distance2 = GisTools.computeDistance2(new Coord(createVehicle.getLon(),createVehicle.getLat()), new Coord(ownedFacility.getLon(), ownedFacility.getLat()));
+        System.out.println(distance2);
+        System.out.println(createVehicle.toString());
         System.out.println(Arrays.asList(getAllFires()));
     }
 }
