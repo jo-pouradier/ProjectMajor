@@ -12,9 +12,7 @@ import java.util.UUID;
 public class FacilityService {
 
     public List<FacilityDto> getAllFacilities() {
-        List<FacilityDto> response = requests.makeRequest("facility", HttpMethod.GET, null,List.class);
-        System.out.println(response);
-        return null;
+        return requests.makeRequest("facility", HttpMethod.GET, null,List.class);
     }
 
     public FacilityDto addFacility(FacilityDto facilityDto) {
@@ -36,7 +34,7 @@ public class FacilityService {
 
     public static void main(String[] args) {
         FacilityService facilityService = new FacilityService();
-        facilityService.getAllFacilities();
+        List<FacilityDto> test = facilityService.getAllFacilities();
     }
 
 }
