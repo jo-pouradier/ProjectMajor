@@ -16,17 +16,6 @@ job_build_project:
   only:
     - bot
 
-#docker_build:
-#  image: docker:20
-#  stage: build
-#  services:
-#    - docker:20-dind
-#  before_script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#  script:
-#    - docker build -t $CI_REGISTRY/cpelyon/4eti-2022-2023/projet_clbd_g4_2022-2023:latest -f ./Dockerfile .
-#    - docker push $CI_REGISTRY/cpelyon/4eti-2022-2023/projet_clbd_g4_2022-2023:latest
-
 docker_push:
   image: docker:20
   stage: push
