@@ -3,12 +3,7 @@ package fr.clbd.fire.service;
 import com.project.model.dto.Coord;
 import com.project.model.dto.VehicleDto;
 import fr.clbd.fire.utils.RequestsUtils;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class VehicleService {

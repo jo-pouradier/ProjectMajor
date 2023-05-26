@@ -45,6 +45,14 @@ public class RequestsUtils {
         return makeRequest("/fires", FireDto[].class);
     }
 
+    public static FireDto getFire(int id) {
+        return makeRequest("/fire/" + id, FireDto.class);
+    }
+
+    public static int getDistanceBetweenCoord(double lat1, double lon1, double lat2, double lon2) {
+        return makeRequest("/distance?latCoord1=" + lat1 + "&lonCoord1=" + lon1 + "&latCoord2=" + lat2 + "&lonCoord2=" + lon2, Integer.class);
+    }
+
     // ------ FACILITY --------
     public static FacilityDto[] getFacilities() {
         return makeRequest("/facility", FacilityDto[].class);
