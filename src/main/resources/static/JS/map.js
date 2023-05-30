@@ -1,4 +1,10 @@
 const map = L.map('map').setView([45.75, 4.85], 13);
+const polygon = L.polygon([
+    [45.65, 4.75],
+    [45.65, 4.95],
+    [45.85, 4.95],
+    [45.85, 4.75]
+])
 const token = "R6cQuklra3e9KwQdlLMguhgLQVrbAXRctK2fpXtSJpvI7VUWPdyZH0r0IrnRSlV9";
 let color = "blue";
 const listColorTrucks = ["red", "blue", "green", "gold", "orange", "violet", "black", "grey", "yellow"];
@@ -14,11 +20,14 @@ const mapFireTypeColor = {
 const markerIcon = createMarkerIcon(color, `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`);
 const fireIcon = createMarkerIcon("blue", "../images/blueFire.png");
 
+let isLimitDisplay = false;
+
 L.tileLayer(
     `https://tile.jawg.io/jawg-light/{z}/{x}/{y}.png?access-token=${token}`, {
         attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>',
     }
 ).addTo(map);
+
 
 /**
  * @description Create a custom marker icon.
@@ -44,7 +53,6 @@ function createMarkerIcon(color, iconUrl) {
 async function displayTrucks() {
     const trucksResponse = await fetch("/vehicle/getAllVehicle");
     const trucksJson = await trucksResponse.json();
-    console.log(trucksJson);
 
     const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
     const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
@@ -69,7 +77,6 @@ async function displayTrucks() {
 async function displayFires() {
     const firesResponse = await fetch("/fire/");
     const firesJson = await firesResponse.json();
-    console.log(firesJson);
 
     firesJson.forEach(fire => {
         color = mapFireTypeColor.get(fire.fireType) || "blue";
@@ -83,6 +90,37 @@ async function displayFires() {
     });
 }
 
+// TODO tester cette focntion avec les vraies données
+async function displayLimitSquare() {
+    isLimitDisplay = !isLimitDisplay;
+    if (isLimitDisplay) {
+        polygon.addTo(map);
+    } else {
+        map.removeLayer(polygon);
+    }
+
+}
+
 // Display all trucks and fires
 displayTrucks();
 displayFires();
+
+function toggleMenu() {
+    var menu = document.getElementById('menuContainer');
+    if (menu.style.display === 'none') {
+        menu.style.display = 'block';
+    } else {
+        menu.style.display = 'none';
+    }
+}
+
+function displayOptions() {
+    var selectedOptions = [];
+    var checkboxes = document.querySelectorAll('.menu input[type="checkbox"]');
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            selectedOptions.push(checkbox.id);
+        }
+    });
+    alert("Selected Options: " + selectedOptions.join(', '));
+}

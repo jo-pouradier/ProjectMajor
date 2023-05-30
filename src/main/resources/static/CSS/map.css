@@ -1,5 +1,27 @@
 #map {
     margin: auto;
-    width: 600px;
-    height: 450px;
+    width: 100vh;
+    height: 100vh;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    padding: 10px;
+    background-color: #f2f2f2;
+}
+
+.option {
+    margin-bottom: 5px;
+}
+
+.option label {
+    display: block;
+}
+
+.content {
+    margin-top: 50px; /* Add margin to create space for the menu */
+    padding: 10px;
+    background-color: #fff;
 }
