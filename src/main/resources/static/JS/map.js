@@ -5,6 +5,8 @@ const polygon = L.polygon([
     [45.85, 4.95],
     [45.85, 4.75]
 ])
+let listTrucks = [];
+let listFires = [];
 const token = "R6cQuklra3e9KwQdlLMguhgLQVrbAXRctK2fpXtSJpvI7VUWPdyZH0r0IrnRSlV9";
 let color = "blue";
 const listColorTrucks = ["red", "blue", "green", "gold", "orange", "violet", "black", "grey", "yellow"];
@@ -53,7 +55,7 @@ function createMarkerIcon(color, iconUrl) {
 async function displayTrucks() {
     const trucksResponse = await fetch("/vehicle/getAllVehicle");
     const trucksJson = await trucksResponse.json();
-
+    listTrucks = trucksJson;
     const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
     const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
     const mapFacilityRefIDColor = new Map();
@@ -77,7 +79,7 @@ async function displayTrucks() {
 async function displayFires() {
     const firesResponse = await fetch("/fire/");
     const firesJson = await firesResponse.json();
-
+    listFires = firesJson;
     firesJson.forEach(fire => {
         color = mapFireTypeColor.get(fire.fireType) || "blue";
         fireIcon.options.iconUrl = `../images/${color}Fire.png`;
