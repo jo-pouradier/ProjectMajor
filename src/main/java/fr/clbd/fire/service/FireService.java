@@ -3,7 +3,6 @@ package fr.clbd.fire.service;
 import com.project.model.dto.FireDto;
 import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.stereotype.Service;
-import java.util.UUID;
 
 @Service
 public class FireService {
