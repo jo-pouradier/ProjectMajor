@@ -106,7 +106,7 @@ displayTrucks();
 displayFires();
 
 function toggleMenu() {
-    var menu = document.getElementById('menuContainer');
+    let menu = document.getElementById('menuContainer');
     if (menu.style.display === 'none') {
         menu.style.display = 'block';
     } else {
@@ -115,8 +115,8 @@ function toggleMenu() {
 }
 
 function displayOptions() {
-    var selectedOptions = [];
-    var checkboxes = document.querySelectorAll('.menu input[type="checkbox"]');
+    let selectedOptions = [];
+    let checkboxes = document.querySelectorAll('.menu input[type="checkbox"]');
     checkboxes.forEach(function (checkbox) {
         if (checkbox.checked) {
             selectedOptions.push(checkbox.id);
