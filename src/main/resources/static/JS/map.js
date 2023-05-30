@@ -1,7 +1,16 @@
 const map = L.map('map').setView([45.75, 4.85], 13);
-const tocken = "R6cQuklra3e9KwQdlLMguhgLQVrbAXRctK2fpXtSJpvI7VUWPdyZH0r0IrnRSlV9"
+const token = "R6cQuklra3e9KwQdlLMguhgLQVrbAXRctK2fpXtSJpvI7VUWPdyZH0r0IrnRSlV9"
 let color = "blue";
-const listColor = ["red", "blue", "green", "gold", "orange", "violet", "black", "grey", "yellow"];
+const listColorTrucks = ["red", "blue", "green", "gold", "orange", "violet", "black", "grey", "yellow"];
+const listColorFires = ['yellow', 'blue', 'purple', 'pink', 'green', 'red'];
+const mapFireTypeColor = {
+    'E_Electric': 'blue',
+    'B_Gasoline': 'green',
+    'B_Plastics': 'purple',
+    'C_Flammable_Gases': 'pink',
+    'D_Metals': 'yellow',
+    'B_Alcohol': 'red'
+};
 const markerIcon = new L.Icon({
     iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -10,9 +19,17 @@ const markerIcon = new L.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
+const fireIcon = new L.Icon({
+    iconUrl: '../images/blueFire.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
 
 L.tileLayer(
-    `https://tile.jawg.io/jawg-light/{z}/{x}/{y}.png?access-token=${tocken}`, {
+    `https://tile.jawg.io/jawg-light/{z}/{x}/{y}.png?access-token=${token}`, {
         attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>',
     }
 ).addTo(map);
@@ -33,9 +50,8 @@ async function displayTrucks() {
     // create a map with facilityRefID as key and color as value
     const mapFacilityRefIDColor = new Map();
     uniqueFacilityRefID.forEach((facilityRefID, index) => {
-        mapFacilityRefIDColor.set(facilityRefID, listColor[index]);
+        mapFacilityRefIDColor.set(facilityRefID, listColorTrucks[index]);
     });
-    console.log(mapFacilityRefIDColor)
 
     trucksJson.forEach(truck => {
         // set up the marker
@@ -50,8 +66,29 @@ async function displayTrucks() {
         }
         marker.bindPopup(desc);
     });
+}
 
+async function displayFires() {
+    const fires = (await fetch("/fire/"));
+    const firesJson = await fires.json();
+    console.log(firesJson);
+    // create a map with facilityRefID as key and color as value
+    firesJson.forEach(fire => {
+        // set up the marker
+        color = mapFireTypeColor.get(fire.fireType);
+        if (color === undefined) color = "blue";
+        fireIcon.options.iconUrl = `../images/${color}Fire.png`;
+        const marker = L.marker([fire.lat, fire.lon], {icon: fireIcon}).addTo(map);
+        // set up the popup
+        let desc = ``;
+        for (const [key, value] of Object.entries(fire)) {
+            desc += `<b>${key}: ${value}</b><br>`;
+        }
+        marker.bindPopup(desc);
+    });
 }
 
 // display all trucks
 displayTrucks();
+displayFires();
+
