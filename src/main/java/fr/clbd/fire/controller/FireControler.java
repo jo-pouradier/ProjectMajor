@@ -23,7 +23,7 @@ public class FireControler {
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public FireDto getFire(@PathVariable String id) {
-        return fireService.getFire(UUID.fromString(id));
+        return fireService.getFire((Integer.valueOf(id)));
     }
 
     @GetMapping(value = "/distance", produces = "application/json")
