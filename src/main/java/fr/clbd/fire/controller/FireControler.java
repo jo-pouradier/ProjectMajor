@@ -2,8 +2,12 @@ package fr.clbd.fire.controller;
 
 import com.project.model.dto.FireDto;
 import fr.clbd.fire.service.FireService;
+import fr.clbd.fire.utils.RequestsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/fire")

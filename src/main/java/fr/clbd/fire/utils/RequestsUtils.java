@@ -2,6 +2,11 @@ package fr.clbd.fire.utils;
 
 import com.project.model.dto.*;
 import com.project.tools.GisTools;
+import fr.clbd.fire.model.Facility;
+import fr.clbd.fire.model.Fire;
+import fr.clbd.fire.model.Vehicle;
+import jdk.incubator.vector.FloatVector;
+import jdk.incubator.vector.Vector;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -97,6 +102,19 @@ public class RequestsUtils {
         return Boolean.TRUE.equals(makeRequest("/vehicle/" + id, HttpMethod.DELETE, null, Boolean.class));
     }
 
+    public static Coord getCoord(double lon, double lat) {
+        return new Coord(lon, lat);
+    }
+
+    public static FireDto generateFakeFire(Coord coord) {
+        FireDto fireDto = new FireDto();
+        fireDto.setLat(coord.getLat());
+        fireDto.setLon(coord.getLon());
+        fireDto.setIntensity(100);
+        fireDto.setRange(50);
+        return fireDto;
+    }
+
     public static VehicleDto addVehicle(VehicleDto vehicleDto) {
         return makeRequest("/vehicle/" + uuid, HttpMethod.POST, vehicleDto, VehicleDto.class);
     }
@@ -108,15 +126,29 @@ public class RequestsUtils {
         return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.PUT, vehicleDto, VehicleDto.class);
     }
 
+    public static boolean isAtFire(VehicleDto vehicleDto, FireDto fireDto) {
+        return GisTools.computeDistance2(new Coord(vehicleDto.getLat(), vehicleDto.getLon()), new Coord(fireDto.getLat(), fireDto.getLon())) <= fireDto.getRange();
+    }
+
+    public static void info(Object message){
+        System.out.println(message);
+    }
     public static void main(String[] args) {
         FacilityDto[] facilities = getFacilities();
-        FacilityDto ownedFacility = Arrays.stream(facilities).filter(facilityDto -> {
+        FacilityDto ownedFacilityDto = Arrays.stream(facilities).filter(facilityDto -> {
            return facilityDto.getName().equals(RequestsUtils.teamName);
         }).findFirst().get();
-
-        System.out.println("Notre facility:" + ownedFacility.getId()+" "+ownedFacility.getLat() + ":"+ ownedFacility.getLon());
+        Facility ownedFacility = Facility.fromDto(ownedFacilityDto);
+        System.out.println("Owned facility : " + ownedFacility);
+        FacilityDto otherFacilityDto = Arrays.stream(facilities).filter(facilityDto -> {
+            return !facilityDto.getName().equals(RequestsUtils.teamName);
+        }).findFirst().get();
+        Facility otherFacility = Facility.fromDto(otherFacilityDto);
+        System.out.println("Other facility : " + otherFacility);
         FireDto[] fires = getAllFires();
-
+        RequestsUtils.info(fires.length+" fires");
+        FireDto fakeFireDto = generateFakeFire(getCoord(otherFacility.getLon()+1, otherFacility.getLat()));
+        Fire fakeFire = Fire.fromDto(fakeFireDto);
         for(FireDto fire : fires) {
 
         }
@@ -130,17 +162,52 @@ public class RequestsUtils {
 //        vehicleDto.setType(type);
 //        vehicleDto.setFuel(type.getFuelCapacity());
 //        vehicleDto.setLiquidQuantity(type.getLiquidCapacity());
-        VehicleDto car = getVehicle(3800);
-        System.out.println(car.getLat()+" " + car.getLon());
-        car = moveVehicle(car.getId(), new Coord());
-        System.out.println(car.getLat()+" " + car.getLon());
-        int distance = GisTools.computeDistance2(new Coord(car.getLon(),car.getLat()), new Coord(ownedFacility.getLon(), ownedFacility.getLat()));
+//        VehicleDto carDto = getVehicle(3800);
+//        Vehicle car = Vehicle.fromDto(carDto);
+        VehicleDto truckDto = getVehicle(3799);
+        Vehicle truck = Vehicle.fromDto(truckDto);
+        RequestsUtils.info("truck 1: " + truck);
+        truck.setLiquidQuantity(0);
+        truckDto = truck.toDto();
+        RequestsUtils.updateVehicle(truck.getId(),truckDto);
+        truckDto = getVehicle(truckDto.getId());
+        truck = Vehicle.fromDto(truckDto);
+        RequestsUtils.info("truck 2: " + truck);
+        truckDto = getVehicle(truckDto.getId());
+        truck = Vehicle.fromDto(truckDto);
+        truck.reset(truck.getType());
+        truckDto = truck.toDto();
+        RequestsUtils.updateVehicle(truck.getId(),truckDto);
+        truckDto = getVehicle(truckDto.getId());
+        truck = Vehicle.fromDto(truckDto);
+        RequestsUtils.info("truck 3: " + truck);
+        }
 
-        System.out.println(distance);
-        VehicleDto createVehicle = getVehicle(3799);
-        int distance2 = GisTools.computeDistance2(new Coord(createVehicle.getLon(),createVehicle.getLat()), new Coord(ownedFacility.getLon(), ownedFacility.getLat()));
-        System.out.println(distance2);
-        System.out.println(createVehicle.toString());
-        System.out.println(Arrays.asList(getAllFires()));
-    }
+        public static void moveToCoordInThread(Coord coord, VehicleDto vehicleDto){
+            // Coefficient accelerateur de mouvement
+            float speed_coef = 10;
+            int start_distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+            // Ligne droite
+            double vector_x = coord.getLat() - vehicleDto.getLat();
+            double vector_y = coord.getLon() - vehicleDto.getLon();
+            // Normalise
+            vector_x = vector_x / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
+            vector_y = vector_y / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
+            // time in hours
+            double time = start_distance / (vehicleDto.getType().getMaxSpeed() * 1000 / 3600);
+
+            Thread thread = new Thread(() -> {
+                try {
+                    int distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+                    while(distance != 0){
+                        distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+                        Thread.sleep((long) (time * 1000 * 60 * 60 / speed_coef));
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+        }
+
 }
