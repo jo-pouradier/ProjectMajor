@@ -95,25 +95,24 @@ function createMarkerIconFromSvgString(color, svgString) {
 
 /**
  * @description Display all trucks on the map.
+ * @param trucksJson list of trucks as json
  * @returns {Promise<void>}
  */
-async function displayTrucks() {
-    const trucksResponse = await fetch("/vehicle/getAllVehicle");
-    const trucksJson = await trucksResponse.json();
-    listTrucks = trucksJson;
+async function displayTrucks(trucksJson) {
+    // set up a color for each facilityRefID
     const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
     const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
     const mapFacilityRefIDColor = new Map();
-
-    // fetch truck icon as svg string
-    const truckSvgStringBase64 = await getImageString('/image/svg/truck.svg');
-    const truckSvg = atob(truckSvgStringBase64.split(',')[1]);
-    const truckIcon = createMarkerIconFromSvgString("blue", truckSvg);
-
     uniqueFacilityRefID.forEach((facilityRefID, index) => {
         mapFacilityRefIDColor.set(facilityRefID, listColorTrucks[index]);
     });
 
+    // fetch truck icon as svg string to create a marker icon
+    const truckSvgStringBase64 = await getImageString('/image/svg/truck.svg');
+    const truckSvg = atob(truckSvgStringBase64.split(',')[1]);
+    const truckIcon = createMarkerIconFromSvgString("blue", truckSvg);
+
+    // display each trucks on the map
     trucksJson.forEach(truck => {
         color = mapFacilityRefIDColor.get(truck.facilityRefID) || "blue";
         truckIcon.options.className = color + "Truck";
@@ -130,12 +129,7 @@ async function displayTrucks() {
  * @description Display all fires on the map.
  * @returns {Promise<void>}
  */
-async function displayFires() {
-    // get all fires from backend as dtos
-    const firesResponse = await fetch("/fire/");
-    const firesJson = await firesResponse.json();
-    // save fires in global variable
-    listFires = firesJson;
+async function displayFires(firesJson) {
     firesJson.forEach(fire => {
         // set up a color for each fire type
         color = mapFireTypeColor.get(fire.fireType) || "blue";
@@ -165,9 +159,27 @@ async function displayLimitSquare() {
 
 }
 
+
+async function displayAllTrucks() {
+    const trucksResponse = await fetch("/vehicle/getAllVehicle");
+    const trucksJson = await trucksResponse.json();
+    listTrucks = trucksJson;
+    displayTrucks(trucksJson);
+}
+
+async function displayAllFires() {
+    // get all fires from backend as dtos
+    const firesResponse = await fetch("/fire/");
+    const firesJson = await firesResponse.json();
+    // save fires in global variable
+    listFires = firesJson;
+    // display fires on the map
+    displayFires(firesJson);
+}
+
 // Display all trucks and fires
-displayTrucks();
-displayFires();
+displayAllTrucks();
+displayAllFires();
 
 /**
  * @description Display the menu on the map and replace it when closed.
