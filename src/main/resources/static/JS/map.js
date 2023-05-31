@@ -19,7 +19,33 @@ const mapFireTypeColor = {
     'D_Metals': 'yellow',
     'B_Alcohol': 'red'
 };
-const markerIcon = createMarkerIcon(color, `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`);
+
+function getImageString(url) {
+    return fetch(url)
+        .then((response) => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .then((blob) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+
+                reader.readAsDataURL(blob);
+            });
+        })
+        .catch((err) => {
+            console.error('Error fetching image:', err);
+            return undefined;
+        });
+}
+
 const fireIcon = createMarkerIcon("blue", "../images/blueFire.png");
 
 let isLimitDisplay = false;
@@ -31,17 +57,27 @@ L.tileLayer(
 ).addTo(map);
 
 
-/**
- * @description Create a custom marker icon.
- * @param {string} color - The color for the marker icon.
- * @param {string} iconUrl - The URL of the marker icon image.
- * @returns {L.Icon} - The created marker icon object.
- */
 function createMarkerIcon(color, iconUrl) {
     return new L.Icon({
         iconUrl: iconUrl,
+        fill: color,
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
         iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+}
+
+function createMarkerIconFromSvgString(color, svgString) {
+    let htmlObject = document.createElement('div');
+    htmlObject.innerHTML = svgString;
+    return L.divIcon({
+        className: 'my-custom-pin',
+        html: svgString,
+        fill: color,
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 35],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
@@ -60,14 +96,20 @@ async function displayTrucks() {
     const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
     const mapFacilityRefIDColor = new Map();
 
+    // fetch truck icon as svg string
+    const truckSvgStringBase64 = await getImageString('/image/svg/truck.svg');
+    const truckSvg = atob(truckSvgStringBase64.split(',')[1]);
+    const truckIcon = createMarkerIconFromSvgString("blue", truckSvg);
+
     uniqueFacilityRefID.forEach((facilityRefID, index) => {
         mapFacilityRefIDColor.set(facilityRefID, listColorTrucks[index]);
     });
+    console.log(trucksJson)
 
     trucksJson.forEach(truck => {
         color = mapFacilityRefIDColor.get(truck.facilityRefID) || "blue";
-        markerIcon.options.iconUrl = `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`;
-        const marker = L.marker([truck.lat, truck.lon], {icon: markerIcon}).addTo(map);
+        truckIcon.options.iconUrl = `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`;
+        const marker = L.marker([truck.lat, truck.lon], {icon: truckIcon,}).addTo(map);
         let desc = "";
         for (const [key, value] of Object.entries(truck)) {
             desc += `<b>${key}: ${value}</b><br>`;

@@ -35,3 +35,19 @@
     border: 1px solid #d3d3d3;
     cursor: move;
 }
+
+.blueTruck {
+    /* to black */
+    filter: invert(1) sepia(1) saturate(0) hue-rotate(180deg);
+    /* or to blue */
+    /*filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);*/
+}
+
+.my-custom-pin .st4 {
+    width: 35px;
+    height: 35px;
+}
+
+.my-custom-pin .st2 {
+    fill: #FF0000;
+}

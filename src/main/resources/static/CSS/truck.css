@@ -1,0 +1,35 @@
+.blueTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(180deg);
+}
+
+.redTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(0deg);
+}
+
+.greenTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(90deg);
+}
+
+.orangeTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(45deg);
+}
+
+.purpleTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(270deg);
+}
+
+.yellowTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(60deg);
+}
+
+.pinkTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(330deg);
+}
+
+.tealTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(150deg);
+}
+
+.grayTruck {
+    filter: brightness(0.8) saturate(2) hue-rotate(0deg) grayscale(100%);
+}
