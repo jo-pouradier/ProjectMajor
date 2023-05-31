@@ -1,5 +1,5 @@
 .idea
 /target
 /FireApp.iml
-/fire_token
-/google_route_api_key
+fire_token
+google_route_api_key
