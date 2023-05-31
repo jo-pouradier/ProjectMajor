@@ -55,7 +55,8 @@ public class RequestsUtils {
     }
 
     public static int getDistanceBetweenCoord(double lat1, double lon1, double lat2, double lon2) {
-        return GisTools.computeDistance2(new Coord(lon1, lat1), new Coord(lon2, lat2));
+        return (int)(GeoUtils.getDistance(new Coord(lon1, lat1), new Coord(lon2, lat2))*1000);
+//        return GisTools.computeDistance2(new Coord(lon1, lat1), new Coord(lon2, lat2));
     }
 
     // ------ FACILITY --------
@@ -118,14 +119,17 @@ public class RequestsUtils {
     }
 
     public static VehicleDto moveVehicle(int id, Coord coord) {
-        return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.PUT, coord, VehicleDto.class);
+        return makeRequest("/vehicle/move/" + uuid + "/" + id, HttpMethod.PUT, coord, VehicleDto.class);
+    }
+    public static VehicleDto moveVehicle(int id, VehicleDto vehicleDto) {
+        return moveVehicle(id, new Coord(vehicleDto.getLon(), vehicleDto.getLat()));
     }
     public static VehicleDto updateVehicle(int id, VehicleDto vehicleDto) {
         return makeRequest("/vehicle/" + uuid + "/" + id, HttpMethod.PUT, vehicleDto, VehicleDto.class);
     }
 
     public static boolean isAtFire(VehicleDto vehicleDto, FireDto fireDto) {
-        return GisTools.computeDistance2(new Coord(vehicleDto.getLat(), vehicleDto.getLon()), new Coord(fireDto.getLat(), fireDto.getLon())) <= fireDto.getRange();
+        return GisTools.computeDistance2(new Coord(vehicleDto.getLon(), vehicleDto.getLat()), new Coord(fireDto.getLat(), fireDto.getLon())) <= fireDto.getRange();
     }
 
     public static void info(Object message){
@@ -142,74 +146,89 @@ public class RequestsUtils {
             return !facilityDto.getName().equals(RequestsUtils.teamName);
         }).findFirst().get();
         Facility otherFacility = Facility.fromDto(otherFacilityDto);
+        FacilityDto cibledFacility = getFacility(40);
         System.out.println("Other facility : " + otherFacility);
         FireDto[] fires = getAllFires();
         RequestsUtils.info(fires.length+" fires");
-        FireDto fakeFireDto = generateFakeFire(getCoord(otherFacility.getLon()+1, otherFacility.getLat()));
+        FireDto fakeFireDto = generateFakeFire(getCoord(otherFacility.getLon(), otherFacility.getLat()));
         Fire fakeFire = Fire.fromDto(fakeFireDto);
         for(FireDto fire : fires) {
 
         }
-
-//        VehicleType type = VehicleType.CAR;
-//        VehicleDto vehicleDto = new VehicleDto();
-//        vehicleDto.setCrewMember(1);
-//        vehicleDto.setLat(ownedFacility.getLat());
-//        vehicleDto.setLon(ownedFacility.getLon());
-//        vehicleDto.setFacilityRefID(ownedFacility.getId());
-//        vehicleDto.setType(type);
-//        vehicleDto.setFuel(type.getFuelCapacity());
-//        vehicleDto.setLiquidQuantity(type.getLiquidCapacity());
-//        VehicleDto carDto = getVehicle(3800);
-//        Vehicle car = Vehicle.fromDto(carDto);
         VehicleDto truckDto = getVehicle(3799);
         Vehicle truck = Vehicle.fromDto(truckDto);
         RequestsUtils.info("truck 1: " + truck);
-        truck.setLiquidQuantity(0);
-        truckDto = truck.toDto();
-        RequestsUtils.updateVehicle(truck.getId(),truckDto);
-        truckDto = getVehicle(truckDto.getId());
-        truck = Vehicle.fromDto(truckDto);
-        RequestsUtils.info("truck 2: " + truck);
-        truckDto = getVehicle(truckDto.getId());
-        truck = Vehicle.fromDto(truckDto);
-        truck.reset(truck.getType());
-        truckDto = truck.toDto();
-        RequestsUtils.updateVehicle(truck.getId(),truckDto);
-        truckDto = getVehicle(truckDto.getId());
-        truck = Vehicle.fromDto(truckDto);
-        RequestsUtils.info("truck 3: " + truck);
+        moveToCoordInThread(new Coord(fakeFire.getLon(),fakeFire.getLat()), truckDto);
+        truckDto = getVehicle(3799);
+        moveToCoordInThread(new Coord(ownedFacility.getLon(),ownedFacility.getLat()), truckDto);
         }
-
-        public static void moveToCoordInThread(Coord coord, VehicleDto vehicleDto){
+        public static void waitFireOff(int fireId){
+            FireDto fireDto = getFire(fireId);
+            while(fireDto.getIntensity() > 0){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                fireDto = getFire(fireId);
+            }
+        }
+        public static void moveToCoordInThread(Coord fire, VehicleDto vehicleDto){
             // Coefficient accelerateur de mouvement
             float speed_coef = 10;
-            int start_distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+            int start_distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
             // Ligne droite
-            double vector_x = coord.getLat() - vehicleDto.getLat();
-            double vector_y = coord.getLon() - vehicleDto.getLon();
+            double vector_x = fire.getLat()-vehicleDto.getLat();
+            double vector_y = fire.getLon()-vehicleDto.getLon();
             // Normalise
-            vector_x = vector_x / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
-            vector_y = vector_y / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
-            // time in hours
-            double time = 3600 * start_distance / (vehicleDto.getType().getMaxSpeed());
-            double step_x = vector_x * speed_coef / time;
-            double step_y = vector_y * speed_coef / time;
+//            vector_x = vector_x / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
+//            vector_y = vector_y / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
+            // time in seconds
+            double time = 3600 * ((start_distance/1000.0) / (vehicleDto.getType().getMaxSpeed()) )/ speed_coef;
+            double step_x = vector_x / time;
+            double step_y = vector_y / time;
             info("step_x : " + step_x);
             info("step_y : " + step_y);
-            return;
-//            Thread thread = new Thread(() -> {
-//                try {
-//                    int distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
-//                    while(distance != 0){
-//                        distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
-//                        Thread.sleep((long) (time * 1000 * 60 * 60 / speed_coef));
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//            thread.start();
+            double step_distance = getDistanceBetweenCoord(step_x,step_y, 0, 0);
+            Thread thread = new Thread(() -> {
+                try {
+                    double new_lat = vehicleDto.getLat()+step_x;
+                    double new_lon = vehicleDto.getLon()+step_x;
+                    vehicleDto.setLat(new_lat);
+                    vehicleDto.setLon(new_lon);
+                    int distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+                    moveVehicle(vehicleDto.getId(), vehicleDto);
+                    info("distance : " + distance);
+                    while(distance > step_distance){
+                        new_lat = vehicleDto.getLat()+step_x;
+                        new_lon = vehicleDto.getLon()+step_y;
+                        vehicleDto.setLat(new_lat);
+                        vehicleDto.setLon(new_lon);
+                        distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+                        if (distance >= step_distance){
+                            moveVehicle(vehicleDto.getId(), vehicleDto);
+                        }
+                        info("distance : " + distance);
+                        Thread.sleep(1000);
+                    }
+                    new_lat = fire.getLat();
+                    new_lon = fire.getLon();
+                    vehicleDto.setLat(new_lat);
+                    vehicleDto.setLon(new_lon);
+                    distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+                    moveVehicle(vehicleDto.getId(), vehicleDto);
+                    info("distance : " + distance);
+                    info("Arrived at fire");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 }

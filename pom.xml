@@ -15,7 +15,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	
-	<name>UserApp</name>
+	<name>FireApp</name>
 	<description>Project Sample for using Springboot</description>
 
 	<properties>
