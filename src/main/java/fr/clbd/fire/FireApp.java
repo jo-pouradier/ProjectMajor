@@ -15,6 +15,6 @@ public class FireApp {
 	public static void main(String[] args) {
 		SpringApplication.run(FireApp.class,args);
 		//System.out.println(RequestsUtils.getAllFires());
-		RequestsUtils.tests();
+//		RequestsUtils.tests();
 	}
 }

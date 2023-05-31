@@ -1,24 +1,25 @@
-const URL_PREFIX = "http://127.0.0.1:80"
+// const URL_PREFIX = "http://127.0.0.1:80"
+const URL_PREFIX = ""
 const FIRE_URL = "/fire"
 const VEHICLE_URL = "/vehicle"
 const TEAMS_URL = "/team"
 const FRONT_TEAMS_URL = "/front/team"
 const FACILITY_URL = "/facility"
 
-export const getUserToken = () => {
+const getUserToken = () => {
     //TODO just return the team tocken
     return localStorage.getItem("token");
 }
-export const getAllFire = (callback, err_callback) => {
+const getAllFire = (callback, err_callback) => {
     let context =
         {method: 'GET'};
-    fetch(URL_PREFIX + FIRE_URL, context)
+    fetch(URL_PREFIX + FIRE_URL + '/', context)
         .then(response => response.json())
         .then(response => callback(response))
         .catch(error => err_callback(error));
 }
 
-export const getAllVehicle = (callback, err_callback) => {
+const getAllVehicle = (callback, err_callback) => {
     let context =
         {method: 'GET'};
     fetch(URL_PREFIX + VEHICLE_URL + "/getAllVehicle", context)
@@ -27,7 +28,7 @@ export const getAllVehicle = (callback, err_callback) => {
         .catch(error => err_callback(error));
 }
 
-export const delVehicle = (teamCode, obj_id, callback, err_callback) => {
+const delVehicle = (teamCode, obj_id, callback, err_callback) => {
     let context =
         {method: 'DELETE'};
     fetch(URL_PREFIX + VEHICLE_URL + '/' + "delVehicle" + '/' + teamCode + '/' + obj_id, context)
@@ -36,7 +37,7 @@ export const delVehicle = (teamCode, obj_id, callback, err_callback) => {
         .catch(error => err_callback(error));
 }
 
-export const addVehicle = (teamCode, obj, callback, err_callback) => {
+const addVehicle = (teamCode, obj, callback, err_callback) => {
     let context;
     const token = getUserToken();
     if (token !== undefined) {
@@ -67,12 +68,21 @@ export const addVehicle = (teamCode, obj, callback, err_callback) => {
         .catch(error => err_callback(error));
 }
 
+const teamVehicle = (callback, err_callback) => {
+    let context =
+        {method: 'GET'};
+    fetch(URL_PREFIX + VEHICLE_URL + "/getTeamVehicle", context)
+        .then(response => response.json())
+        .then(response => callback(response))
+        .catch(error => err_callback(error));
+}
+
 /**
  * @description TODO verify fct
  * @param callback
  * @param err_callback
  */
-export const getTeams = (callback, err_callback) => {
+const getTeams = (callback, err_callback) => {
     const token = getUserToken();
     let context = {};
     let CURRENT_TEAM_URL = "";
@@ -106,7 +116,7 @@ export const getTeams = (callback, err_callback) => {
 }
 
 
-export const addFacility = (obj, callback, err_callback) => {
+const addFacility = (obj, callback, err_callback) => {
     const token = getUserToken();
     let context = {};
     if (token !== undefined) {
@@ -137,7 +147,7 @@ export const addFacility = (obj, callback, err_callback) => {
         .catch(error => err_callback(error));
 }
 
-export const delFacility = (obj_id, callback, err_callback) => {
+const delFacility = (obj_id, callback, err_callback) => {
     const token = getUserToken();
     let context = {};
     if (token !== undefined) {
@@ -167,11 +177,23 @@ export const delFacility = (obj_id, callback, err_callback) => {
 }
 
 
-export const getAllFacilities = (callback, err_callback) => {
+const getAllFacilities = (callback, err_callback) => {
     let context =
         {method: 'GET'};
     fetch(URL_PREFIX + FACILITY_URL, context)
         .then(response => response.json())
         .then(response => callback(response))
         .catch(error => err_callback(error));
+}
+
+export {
+    getAllFire,
+    getAllVehicle,
+    delVehicle,
+    addVehicle,
+    teamVehicle,
+    getTeams,
+    addFacility,
+    delFacility,
+    getAllFacilities
 }
