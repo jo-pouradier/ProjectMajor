@@ -5,8 +5,6 @@ import com.project.tools.GisTools;
 import fr.clbd.fire.model.Facility;
 import fr.clbd.fire.model.Fire;
 import fr.clbd.fire.model.Vehicle;
-import jdk.incubator.vector.FloatVector;
-import jdk.incubator.vector.Vector;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -57,7 +55,7 @@ public class RequestsUtils {
     }
 
     public static int getDistanceBetweenCoord(double lat1, double lon1, double lat2, double lon2) {
-        return makeRequest("/distance?latCoord1=" + lat1 + "&lonCoord1=" + lon1 + "&latCoord2=" + lat2 + "&lonCoord2=" + lon2, Integer.class);
+        return GisTools.computeDistance2(new Coord(lon1, lat1), new Coord(lon2, lat2));
     }
 
     // ------ FACILITY --------
@@ -181,6 +179,7 @@ public class RequestsUtils {
         truckDto = getVehicle(truckDto.getId());
         truck = Vehicle.fromDto(truckDto);
         RequestsUtils.info("truck 3: " + truck);
+        moveToCoordInThread(getCoord(otherFacility.getLon(), otherFacility.getLat()), truckDto);
         }
 
         public static void moveToCoordInThread(Coord coord, VehicleDto vehicleDto){
@@ -194,20 +193,24 @@ public class RequestsUtils {
             vector_x = vector_x / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
             vector_y = vector_y / Math.sqrt(vector_x * vector_x + vector_y * vector_y);
             // time in hours
-            double time = start_distance / (vehicleDto.getType().getMaxSpeed() * 1000 / 3600);
-
-            Thread thread = new Thread(() -> {
-                try {
-                    int distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
-                    while(distance != 0){
-                        distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
-                        Thread.sleep((long) (time * 1000 * 60 * 60 / speed_coef));
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            double time = 3600 * start_distance / (vehicleDto.getType().getMaxSpeed());
+            double step_x = vector_x * speed_coef / time;
+            double step_y = vector_y * speed_coef / time;
+            info("step_x : " + step_x);
+            info("step_y : " + step_y);
+            return;
+//            Thread thread = new Thread(() -> {
+//                try {
+//                    int distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+//                    while(distance != 0){
+//                        distance = getDistanceBetweenCoord(coord.getLat(), coord.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+//                        Thread.sleep((long) (time * 1000 * 60 * 60 / speed_coef));
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//            thread.start();
         }
 
 }
