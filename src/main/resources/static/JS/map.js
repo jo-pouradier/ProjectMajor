@@ -6,8 +6,8 @@ const polygon = L.polygon([
     [45.85, 4.95],
     [45.85, 4.75]
 ])
-let listTrucks = [];
-let listFires = [];
+let listTrucksIcon = [];
+let listFiresIcon = [];
 const token = "R6cQuklra3e9KwQdlLMguhgLQVrbAXRctK2fpXtSJpvI7VUWPdyZH0r0IrnRSlV9";
 let color = "blue";
 const listColorTrucks = ["red", "blue", "green", "gold", "orange", "violet", "black", "grey", "yellow"];
@@ -22,6 +22,7 @@ const mapFireTypeColor = {
 };
 
 let isLimitDisplay = false;
+let isTeamTruckDisplay = false;
 
 /**
  * @description Get the image from backend as a base64 string.
@@ -99,6 +100,10 @@ function createMarkerIconFromSvgString(color, svgString) {
  * @returns {Promise<void>}
  */
 async function displayTrucks(trucksJson) {
+    listTrucksIcon.forEach(truck => {
+        map.removeLayer(truck);
+    });
+    listTrucksIcon = [];
     // set up a color for each facilityRefID
     const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
     const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
@@ -117,6 +122,7 @@ async function displayTrucks(trucksJson) {
         color = mapFacilityRefIDColor.get(truck.facilityRefID) || "blue";
         truckIcon.options.className = color + "Truck";
         const marker = L.marker([truck.lat, truck.lon], {icon: truckIcon,}).addTo(map);
+        listTrucksIcon.push(marker);
         let desc = "";
         for (const [key, value] of Object.entries(truck)) {
             desc += `<b>${key}: ${value}</b><br>`;
@@ -130,11 +136,17 @@ async function displayTrucks(trucksJson) {
  * @returns {Promise<void>}
  */
 async function displayFires(firesJson) {
+    listFiresIcon.forEach(fire => {
+        map.removeLayer(fire);
+    });
+    listFiresIcon = [];
+
     firesJson.forEach(fire => {
         // set up a color for each fire type
         color = mapFireTypeColor.get(fire.fireType) || "blue";
         const fireIcon = createMarkerIcon("blue", `../images/${color}Fire.png`);
         const marker = L.marker([fire.lat, fire.lon], {icon: fireIcon}).addTo(map);
+        listFiresIcon.push(marker);
         let desc = "";
         // set up the popup content with all fire properties
         for (const [key, value] of Object.entries(fire)) {
@@ -163,7 +175,6 @@ async function displayLimitSquare() {
 async function displayAllTrucks() {
     const trucksResponse = await fetch("/vehicle/getAllVehicle");
     const trucksJson = await trucksResponse.json();
-    listTrucks = trucksJson;
     displayTrucks(trucksJson);
 }
 
@@ -171,12 +182,21 @@ async function displayAllFires() {
     // get all fires from backend as dtos
     const firesResponse = await fetch("/fire/");
     const firesJson = await firesResponse.json();
-    // save fires in global variable
-    listFires = firesJson;
     // display fires on the map
     displayFires(firesJson);
 }
 
+async function displayTeamTrucks() {
+    if (!isTeamTruckDisplay) {
+        const teamTrucksResponse = await fetch("/vehicle/getTeamVehicle");
+        const teamTrucksJson = await teamTrucksResponse.json();
+        await displayTrucks(teamTrucksJson);
+        isTeamTruckDisplay = true;
+    } else {
+        await displayAllTrucks();
+        isTeamTruckDisplay = false;
+    }
+}
 // Display all trucks and fires
 displayAllTrucks();
 displayAllFires();
