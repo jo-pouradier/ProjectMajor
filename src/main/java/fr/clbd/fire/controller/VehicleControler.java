@@ -38,18 +38,18 @@ public class VehicleControler {
         return vehicleService.delAllVehicles();
     }
 
-    @DeleteMapping(value = "/delVehicle", produces = "application/json")
-    public boolean delVehicle(int id){
-        return vehicleService.delVehicle(id);
+    @DeleteMapping(value = "/delVehicle/{teamId}/{id}", produces = "application/json")
+    public boolean delVehicle(@PathVariable int id, @PathVariable int teamId) {
+        return vehicleService.delVehicle(id, teamId);
     }
 
     @PutMapping(value = "/updateVehicle", produces = "application/json")
-    public VehicleDto updateVehicle(int id,VehicleDto vehicleDto){
-        return vehicleService.updateVehicle(id,vehicleDto);
+    public VehicleDto updateVehicle(int id, VehicleDto vehicleDto) {
+        return vehicleService.updateVehicle(id, vehicleDto);
     }
 
     @PutMapping(value = "/moveVehicle", produces = "application/json")
-    public VehicleDto moveVehicle(int id, Coord coord){
+    public VehicleDto moveVehicle(int id, Coord coord) {
         return vehicleService.moveVehicle(id, coord);
     }
 

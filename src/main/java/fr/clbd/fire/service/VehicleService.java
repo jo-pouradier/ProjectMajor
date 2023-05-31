@@ -27,8 +27,8 @@ public class VehicleService {
         return RequestsUtils.delAllVehicles();
     }
 
-    public boolean delVehicle(int id) {
-        return RequestsUtils.delVehicle(id);
+    public boolean delVehicle(int id, int teamId) {
+        return RequestsUtils.delVehicle(id, teamId);
     }
 
     public VehicleDto updateVehicle(int id, VehicleDto VehicleDto) {

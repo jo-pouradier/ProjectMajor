@@ -250,11 +250,11 @@ public class RequestsUtils {
     }
 
     public static boolean delAllVehicles() {
-        return Boolean.TRUE.equals(makeRequest("/vehicle", HttpMethod.DELETE, null, Boolean.class));
+        return Boolean.TRUE.equals(makeRequest("/vehicle" + uuid, HttpMethod.DELETE, null, Boolean.class));
     }
 
-    public static boolean delVehicle(int id) {
-        return Boolean.TRUE.equals(makeRequest("/vehicle/" + id, HttpMethod.DELETE, null, Boolean.class));
+    public static boolean delVehicle(int id, int teamUuid) {
+        return Boolean.TRUE.equals(makeRequest("/vehicle/" + teamUuid + '/' + id, HttpMethod.DELETE, null, Boolean.class));
     }
 
     public static Coord getCoord(double lon, double lat) {
