@@ -70,10 +70,8 @@ function createMarkerIcon(color, iconUrl) {
 }
 
 function createMarkerIconFromSvgString(color, svgString) {
-    let htmlObject = document.createElement('div');
-    htmlObject.innerHTML = svgString;
     return L.divIcon({
-        className: 'my-custom-pin',
+        className: color + 'Truck',
         html: svgString,
         fill: color,
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',

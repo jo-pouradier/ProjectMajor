@@ -43,11 +43,19 @@
     /*filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);*/
 }
 
-.my-custom-pin .st4 {
+.st4 {
     width: 35px;
     height: 35px;
 }
 
-.my-custom-pin .st2 {
+.redTruck .st2 {
     fill: #FF0000;
+}
+
+.greenTruck .st2 {
+    fill: #00FF00;
+}
+
+.blueTruck .st2 {
+    fill: #0000FF;
 }
