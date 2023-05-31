@@ -179,7 +179,6 @@ public class RequestsUtils {
         truckDto = getVehicle(truckDto.getId());
         truck = Vehicle.fromDto(truckDto);
         RequestsUtils.info("truck 3: " + truck);
-        moveToCoordInThread(getCoord(otherFacility.getLon(), otherFacility.getLat()), truckDto);
         }
 
         public static void moveToCoordInThread(Coord coord, VehicleDto vehicleDto){
