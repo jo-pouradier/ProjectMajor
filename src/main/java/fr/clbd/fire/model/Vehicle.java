@@ -142,6 +142,11 @@ public class Vehicle extends VehicleDto {
         this.setLiquidType(best);
     }
 
+
+    public void reset() {
+        this.reset(this.getType());
+    }
+
     public void reset(VehicleType type) {
         this.setType(type);
         this.setFuel(this.getType().getFuelCapacity());
@@ -154,5 +159,13 @@ public class Vehicle extends VehicleDto {
         VehicleDto vehicleDto = new VehicleDto();
         BeanUtils.copyProperties(this, vehicleDto);
         return vehicleDto;
+    }
+
+    public void refuel() {
+        setFuel(getType().getFuelCapacity());
+    }
+
+    public float efficiency(FireType fireType){
+        return getType().getEfficiency()*getLiquidType().getEfficiency(fireType.toString());
     }
 }

@@ -30,14 +30,37 @@ import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1
 
 public class RequestsUtils {
     private final static String baseUrl = "http://vps.cpe-sn.fr:8081/";
+
+    private final static String uuid;
+
+    private static final String teamName = "Fa Triangle (v4)";
+
     private final static String google_route_api_key;
 
     static {
+        try {
+            uuid = loadToken();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try {
             google_route_api_key = loadGoogleRouteApiKey();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String loadToken() throws FileNotFoundException {
+        File file = new File("fire_token");
+        FileReader fileReader = new FileReader(file);
+        char[] chars = new char[(int) file.length()];
+        try {
+            fileReader.read(chars);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        String content = new String(chars);
+        return content;
     }
 
     private static String loadGoogleRouteApiKey() throws FileNotFoundException {
@@ -52,10 +75,6 @@ public class RequestsUtils {
         String content = new String(chars);
         return content;
     }
-
-    private static final String uuid = "9b229cdd-42af-4fbc-845b-07c36b9fba30";
-
-    private static final String teamName = "Fa Triangle (v4)";
 
     private static ArrayList<LatLongDto> decodePoly(String encoded) {
         ArrayList<LatLongDto> poly = new ArrayList<LatLongDto>();
@@ -301,8 +320,7 @@ public class RequestsUtils {
         VehicleDto truckDto = getVehicle(3799);
         Vehicle truck = Vehicle.fromDto(truckDto);
         RequestsUtils.info("truck 1: " + truck);
-        StepDto[] steps = getRoute(new Coord(truck.getLon(), truck.getLat()), new Coord(fakeFire.getLon(), fakeFire.getLat()));
-//        int count = 0;
+        //        int count = 0;
 //        for (StepDto step : steps) {
 //            info("Step " + count);
 //            count++;
@@ -312,17 +330,29 @@ public class RequestsUtils {
 //        if (true) {
 //            return;
 //        }
-        info("Go to destination");
-        info("Distance du trajet: " + calcRouteDistance(steps) + "m");
-        info("Conso: " + calcRouteConsumption(truckDto,steps) + "L");
-        followSteps(truck.getId(), steps);
-        VehicleDto truckDto2 = getVehicle(3799);
-        steps = getRoute(new Coord(truckDto2.getLon(), truckDto2.getLat()), new Coord(ownedFacilityDto.getLon(), ownedFacilityDto.getLat()));
+        boolean running = true;
+        while(running){
+            StepDto[] steps = getRoute(new Coord(truck.getLon(), truck.getLat()), new Coord(fakeFire.getLon(), fakeFire.getLat()));
+            info("Go to destination");
+            info("Distance du trajet: " + calcRouteDistance(steps) + "m");
+            float conso = calcRouteConsumption(truckDto,steps);
+            info("Conso: " + conso + "L");
+            followSteps(truck.getId(), steps);
+            truckDto = getVehicle(3799);
+            truckDto.setFuel(truckDto.getFuel() - conso);
+            updateVehicle(truckDto.getId(), truckDto);
+            VehicleDto truckDto2 = getVehicle(3799);
+            steps = getRoute(new Coord(truckDto2.getLon(), truckDto2.getLat()), new Coord(ownedFacilityDto.getLon(), ownedFacilityDto.getLat()));
 
-        info("Return to base");
-        info("Distance du trajet: " + calcRouteDistance(steps) + "m");
-        info("Conso: " + calcRouteConsumption(truckDto,steps) + "L");
-        followSteps(truck.getId(), steps);
+            info("Return to base");
+            info("Distance du trajet: " + calcRouteDistance(steps) + "m");
+            info("Conso: " + calcRouteConsumption(truckDto,steps) + "L");
+            followSteps(truck.getId(), steps);
+            truckDto = getVehicle(3799);
+            Vehicle vehicle = Vehicle.fromDto(truckDto);
+            vehicle.reset();
+            running = false;
+        }
         if (true) {
             return;
         }
@@ -367,7 +397,7 @@ public class RequestsUtils {
 
     public static void moveToCoordInThread(Coord fire, VehicleDto vehicleDto) {
         // Coefficient accelerateur de mouvement
-        float speed_coef = 2;
+        float speed_coef = 10;
         // request delay in milliseconds
         float request_rate = 0.5f;
         int start_distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
