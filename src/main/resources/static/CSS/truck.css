@@ -1,35 +1,41 @@
-.blueTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(180deg);
+.st4 {
+    width: 35px;
+    height: 35px;
 }
 
-.redTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(0deg);
+/******** all colors of trucks *******/
+.redTruck .st2 {
+    fill: red;
 }
 
-.greenTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(90deg);
+.blueTruck .st2 {
+    fill: blue;
 }
 
-.orangeTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(45deg);
+.greenTruck .st2 {
+    fill: green;
 }
 
-.purpleTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(270deg);
+.goldTruck .st2 {
+    fill: gold;
 }
 
-.yellowTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(60deg);
+.orangeTruck .st2 {
+    fill: orange;
 }
 
-.pinkTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(330deg);
+.violetTruck .st2 {
+    fill: violet;
 }
 
-.tealTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(150deg);
+.blackTruck .st2 {
+    fill: black;
 }
 
-.grayTruck {
-    filter: brightness(0.8) saturate(2) hue-rotate(0deg) grayscale(100%);
+.greyTruck .st2 {
+    fill: grey;
+}
+
+.yellowTruck .st2 {
+    fill: yellow;
 }
