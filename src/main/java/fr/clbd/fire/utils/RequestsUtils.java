@@ -3,6 +3,8 @@ package fr.clbd.fire.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.project.model.dto.*;
 import com.project.tools.GisTools;
+import fr.clbd.fire.bot.Bot;
+import fr.clbd.fire.bot.BotManager;
 import fr.clbd.fire.model.Facility;
 import fr.clbd.fire.model.Fire;
 import fr.clbd.fire.model.Vehicle;
@@ -76,7 +78,7 @@ public class RequestsUtils {
         return content;
     }
 
-    private static ArrayList<LatLongDto> decodePoly(String encoded) {
+    public static ArrayList<LatLongDto> decodePoly(String encoded) {
         ArrayList<LatLongDto> poly = new ArrayList<LatLongDto>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
@@ -116,7 +118,7 @@ public class RequestsUtils {
         return distance;
     }
 
-    public static float calcRouteConsumption(VehicleDto vehicleDto,StepDto[] steps) {
+    public static float calcRouteConsumption(VehicleDto vehicleDto, StepDto[] steps) {
         float distance = calcRouteDistance(steps);
         return (float) (distance * (vehicleDto.getType().getFuelConsumption() / 1000.0));
     }
@@ -209,9 +211,11 @@ public class RequestsUtils {
         return makeRequest("/fire/" + id, FireDto.class);
     }
 
-    public static int getDistanceBetweenCoord(double lat1, double lon1, double lat2, double lon2) {
-        return (int) (GeoUtils.getDistance(new Coord(lon1, lat1), new Coord(lon2, lat2)) * 1000);
-//        return GisTools.computeDistance2(new Coord(lon1, lat1), new Coord(lon2, lat2));
+    public static double getDistanceBetweenCoord(Coord c1, Coord c2) {
+        return GeoUtils.getDistance(c1, c2);
+    }
+    public static double getDistanceBetweenCoord(double lat1, double lon1, double lat2, double lon2) {
+        return getDistanceBetweenCoord(new Coord(lon1, lat1), new Coord(lon2, lat2));
     }
 
     // ------ FACILITY --------
@@ -294,7 +298,7 @@ public class RequestsUtils {
         System.out.println(message);
     }
 
-    public static void tests(){
+    public static void tests() {
         info(google_route_api_key);
 
         FacilityDto[] facilities = getFacilities();
@@ -331,11 +335,12 @@ public class RequestsUtils {
 //            return;
 //        }
         boolean running = true;
-        while(running){
-            StepDto[] steps = getRoute(new Coord(truck.getLon(), truck.getLat()), new Coord(fakeFire.getLon(), fakeFire.getLat()));
+        VehicleDto vehicleDestination = getVehicle(12);
+        while (running) {
+            StepDto[] steps = getRoute(new Coord(truck.getLon(), truck.getLat()), new Coord(vehicleDestination.getLon(), vehicleDestination.getLat()));
             info("Go to destination");
             info("Distance du trajet: " + calcRouteDistance(steps) + "m");
-            float conso = calcRouteConsumption(truckDto,steps);
+            float conso = calcRouteConsumption(truckDto, steps);
             info("Conso: " + conso + "L");
             followSteps(truck.getId(), steps);
             truckDto = getVehicle(3799);
@@ -346,7 +351,7 @@ public class RequestsUtils {
 
             info("Return to base");
             info("Distance du trajet: " + calcRouteDistance(steps) + "m");
-            info("Conso: " + calcRouteConsumption(truckDto,steps) + "L");
+            info("Conso: " + calcRouteConsumption(truckDto, steps) + "L");
             followSteps(truck.getId(), steps);
             truckDto = getVehicle(3799);
             Vehicle vehicle = Vehicle.fromDto(truckDto);
@@ -360,8 +365,9 @@ public class RequestsUtils {
         truckDto = getVehicle(3799);
         moveToCoordInThread(new Coord(ownedFacility.getLon(), ownedFacility.getLat()), truckDto);
     }
+
     public static void main(String[] args) {
-        tests();
+        testBots();
     }
 
     public static void waitFireOff(int fireId) {
@@ -395,12 +401,40 @@ public class RequestsUtils {
         }
     }
 
+    public static void testBots() {
+        VehicleDto truckDto = getVehicle(3799);
+        FacilityDto ownedFacilityDto = getFacility(truckDto.getFacilityRefID());
+
+        FacilityDto cibledFacility = getFacility(6);
+
+        Trajet allee = new Trajet(0, new Coord(truckDto.getLon(), truckDto.getLat()), new Coord(cibledFacility.getLon(), cibledFacility.getLat()));
+        Bot bot = BotManager.getInstance().createBot(truckDto);
+        bot.setTrajet(allee);
+        try {
+            while(bot.getTrajet() != null) {
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Trajet retour = new Trajet(0, new Coord(truckDto.getLon(), truckDto.getLat()), new Coord(ownedFacilityDto.getLon(), ownedFacilityDto.getLat()));
+        bot.setTrajet(retour);
+        try {
+            while(bot.getTrajet() != null) {
+                RequestsUtils.info("Bot size: "+BotManager.getInstance().getBots().size());
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void moveToCoordInThread(Coord fire, VehicleDto vehicleDto) {
         // Coefficient accelerateur de mouvement
-        float speed_coef = 10;
+        float speed_coef = 3.0f;
         // request delay in milliseconds
-        float request_rate = 0.5f;
-        int start_distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+        float request_rate = 0.4f;
+        double start_distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
         // Ligne droite
         double vector_x = fire.getLat() - vehicleDto.getLat();
         double vector_y = fire.getLon() - vehicleDto.getLon();
@@ -415,7 +449,7 @@ public class RequestsUtils {
         double step_distance = getDistanceBetweenCoord(step_x, step_y, 0, 0);
         double new_lat;
         double new_lon;
-        int distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
+        double distance = getDistanceBetweenCoord(fire.getLat(), fire.getLon(), vehicleDto.getLat(), vehicleDto.getLon());
         while (distance > step_distance) {
             new_lat = vehicleDto.getLat() + step_x;
             new_lon = vehicleDto.getLon() + step_y;

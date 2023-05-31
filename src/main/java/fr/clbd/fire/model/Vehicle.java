@@ -6,7 +6,7 @@ import com.project.model.dto.VehicleDto;
 import com.project.model.dto.VehicleType;
 import org.springframework.beans.BeanUtils;
 
-public class Vehicle extends VehicleDto {
+public class Vehicle {
     public static final int CREW_MEMBER_START_VALUE = -1;
     private Integer id;
     private double lon;

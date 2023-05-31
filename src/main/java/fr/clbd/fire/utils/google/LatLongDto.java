@@ -2,6 +2,8 @@ package fr.clbd.fire.utils.google;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.model.dto.Coord;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LatLongDto {
 
@@ -33,5 +35,9 @@ public class LatLongDto {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public Coord toCoord() {
+        return new Coord(this.longitude, this.latitude);
     }
 }
