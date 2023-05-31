@@ -1,10 +1,11 @@
 const map = L.map('map').setView([45.75, 4.85], 13);
 // polygon representing the limit of the game
 const polygon = L.polygon([
-    [45.65, 4.75],
-    [45.65, 4.95],
-    [45.85, 4.95],
-    [45.85, 4.75]
+    [45.6735, 4.9912],
+    [45.6735, 4.7637],
+    [45.826, 4.7637],
+    [45.826, 4.9912]
+
 ])
 let listTrucksIcon = [];
 let listFiresIcon = [];
@@ -214,4 +215,14 @@ function toggleMenu() {
         document.getElementById('menuContainer').style.left = 0 + 'px';
     }
 }
+
+export const getAllVehicle = (callback, err_callback) => {
+    let context =
+        {method: 'GET'};
+    fetch(URL_PREFIX + VEHICLES_URL, context)
+        .then(response => response.json())
+        .then(response => callback(response))
+        .catch(error => err_callback(error));
+}
+
 
