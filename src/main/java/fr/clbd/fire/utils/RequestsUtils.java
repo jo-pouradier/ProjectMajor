@@ -227,7 +227,7 @@ public class RequestsUtils {
     }
 
     public static VehicleDto[] getAllVehicles() {
-        return makeRequest("/vehicle", VehicleDto[].class);
+        return makeRequest("/vehicles", VehicleDto[].class);
     }
 
     public static boolean delAllVehicles() {

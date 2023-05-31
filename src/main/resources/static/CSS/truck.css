@@ -1,0 +1,41 @@
+.st4 {
+    width: 35px;
+    height: 35px;
+}
+
+/******** all colors of trucks *******/
+.redTruck .st2 {
+    fill: red;
+}
+
+.blueTruck .st2 {
+    fill: blue;
+}
+
+.greenTruck .st2 {
+    fill: green;
+}
+
+.goldTruck .st2 {
+    fill: gold;
+}
+
+.orangeTruck .st2 {
+    fill: orange;
+}
+
+.violetTruck .st2 {
+    fill: violet;
+}
+
+.blackTruck .st2 {
+    fill: black;
+}
+
+.greyTruck .st2 {
+    fill: grey;
+}
+
+.yellowTruck .st2 {
+    fill: yellow;
+}
