@@ -21,29 +21,31 @@
 <div id="nav-placeholder"></div>
 
 <div>
-    <button onclick="toggleMenu()">Menu</button>
-    <div class="menu" id="menuContainer">
-        <div class="option">
-            <input type="checkbox" id="limitSquare" onclick="displayLimitSquare()">
-            <label for="limitSquare">Display limit square</label>
+    <div id="menuContainer">
+        <button onclick="toggleMenu()" id="menuButton">Menu</button>
+        <div id="menu" style="display: none;">
+            <div id="menuContainerHeader">Drag Me</div>
+            <div class="option">
+                <input type="checkbox" id="limitSquare" onclick="displayLimitSquare()">
+                <label for="limitSquare">Display limit square</label>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="option2">
+                <label for="option2">Option 2</label>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="option3">
+                <label for="option3">Option 3</label>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="option4">
+                <label for="option4">Option 4</label>
+            </div>
+            <div class="option">
+                <input type="checkbox" id="option5">
+                <label for="option5">Option 5</label>
+            </div>
         </div>
-        <div class="option">
-            <input type="checkbox" id="option2">
-            <label for="option2">Option 2</label>
-        </div>
-        <div class="option">
-            <input type="checkbox" id="option3">
-            <label for="option3">Option 3</label>
-        </div>
-        <div class="option">
-            <input type="checkbox" id="option4">
-            <label for="option4">Option 4</label>
-        </div>
-        <div class="option">
-            <input type="checkbox" id="option5">
-            <label for="option5">Option 5</label>
-        </div>
-        <button onclick="displayOptions()">Display Options</button>
     </div>
 </div>
 
@@ -51,5 +53,8 @@
 <div id="map"></div>
 <script src="JS/map.js"></script>
 <div>Fire Image by <a href="https://www.freepik.com/free-vector/colorful-fire-flame-icons_801494.htm">Freepik</a></div>
+
+<script src="JS/dragElement.js"></script>
+
 </body>
 </html>

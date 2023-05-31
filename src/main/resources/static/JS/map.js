@@ -108,21 +108,13 @@ displayTrucks();
 displayFires();
 
 function toggleMenu() {
-    let menu = document.getElementById('menuContainer');
+    let menu = document.getElementById('menu');
     if (menu.style.display === 'none') {
-        menu.style.display = 'block';
+        menu.style.display = 'contents';
     } else {
         menu.style.display = 'none';
+        document.getElementById('menuContainer').style.top = 81 + 'px';
+        document.getElementById('menuContainer').style.left = 0 + 'px';
     }
 }
 
-function displayOptions() {
-    let selectedOptions = [];
-    let checkboxes = document.querySelectorAll('.menu input[type="checkbox"]');
-    checkboxes.forEach(function (checkbox) {
-        if (checkbox.checked) {
-            selectedOptions.push(checkbox.id);
-        }
-    });
-    alert("Selected Options: " + selectedOptions.join(', '));
-}
