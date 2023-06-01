@@ -3,7 +3,6 @@ const URL_PREFIX = ""
 const FIRE_URL = "/fire"
 const VEHICLE_URL = "/vehicle"
 const TEAMS_URL = "/team"
-const FRONT_TEAMS_URL = "/front/team"
 const FACILITY_URL = "/facility"
 
 const getUserToken = () => {
@@ -77,45 +76,6 @@ const teamVehicle = (callback, err_callback) => {
         .catch(error => err_callback(error));
 }
 
-/**
- * @description TODO verify fct
- * @param callback
- * @param err_callback
- */
-const getTeams = (callback, err_callback) => {
-    const token = getUserToken();
-    let context = {};
-    let CURRENT_TEAM_URL = "";
-    if (token !== undefined) {
-        CURRENT_TEAM_URL = TEAMS_URL;
-        context =
-            {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                },
-            };
-    } else {
-        CURRENT_TEAM_URL = FRONT_TEAMS_URL;
-        context =
-            {method: 'GET'};
-    }
-
-    function handleErrors(response) {
-        if (!response.ok) {
-            throw Error(response.statusText);
-        }
-        return response;
-    }
-
-    fetch(URL_PREFIX + CURRENT_TEAM_URL, context)
-        .then(handleErrors)
-        .then(response => response.json())
-        .then(response => callback(response))
-        .catch(error => err_callback(error));
-}
-
-
 const addFacility = (obj, callback, err_callback) => {
     const token = getUserToken();
     let context = {};
@@ -180,7 +140,7 @@ const delFacility = (obj_id, callback, err_callback) => {
 const getAllFacilities = (callback, err_callback) => {
     let context =
         {method: 'GET'};
-    fetch(URL_PREFIX + FACILITY_URL, context)
+    fetch(URL_PREFIX + FACILITY_URL + '/', context)
         .then(response => response.json())
         .then(response => callback(response))
         .catch(error => err_callback(error));
@@ -192,7 +152,6 @@ export {
     delVehicle,
     addVehicle,
     teamVehicle,
-    getTeams,
     addFacility,
     delFacility,
     getAllFacilities

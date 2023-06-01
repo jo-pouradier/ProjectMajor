@@ -4,6 +4,7 @@ import {displayTrucks, displayFires, displayLimitSquare, removeLimitSquare} from
 
 let isLimitDisplay = false;
 let isTeamTruckDisplay = false;
+let isTeamFacilityDisplay = false;
 
 async function displayLimitSquareF() {
     isLimitDisplay = !isLimitDisplay;
@@ -35,6 +36,16 @@ function toggleMenuF() {
         menu.style.display = 'none';
         document.getElementById('menuContainer').style.top = 81 + 'px';
         document.getElementById('menuContainer').style.left = 0 + 'px';
+    }
+}
+
+function displayTeamFacilityF() {
+    // TODO: display team facility (how to get team facility?)
+    if (!isTeamFacilityDisplay) {
+
+        isTeamFacilityDisplay = true;
+    } else {
+        isTeamFacilityDisplay = false;
     }
 }
 

@@ -1,10 +1,16 @@
 import {COLORS_FIRES, COLORS_TRUCKS, FIRE_TYPE} from "./EnumValues.js";
+import {getAllFacilities} from "./httpApi.js";
 
 let listFiresIcon = [];
 let listTrucksIcon = [];
+let listFacilityIcon = [];
+let mapFacilityRefIDColor = new Map();
+// setup color by facility refID
+getAllFacilities(setupColorByFacilityRefID, (err) => console.log(err));
 let color = "blue";
 const map = L.map('map').setView([45.75, 4.85], 13);
 const jawgToken = "R6cQuklra3e9KwQdlLMguhgLQVrbAXRctK2fpXtSJpvI7VUWPdyZH0r0IrnRSlV9";
+
 
 L.tileLayer(
     `https://tile.jawg.io/jawg-light/{z}/{x}/{y}.png?access-token=${jawgToken}`, {
@@ -25,9 +31,15 @@ const displayLimitSquare = () => {
 }
 
 const removeLimitSquare = () => {
-    map.remove(polygon);
+    map.removeLayer(polygon);
 }
 
+function setupColorByFacilityRefID(facilities) {
+    facilities.forEach((facility, index) => {
+        mapFacilityRefIDColor.set(facility.id, COLORS_TRUCKS[index]);
+    });
+    return mapFacilityRefIDColor;
+}
 
 const mapFireTypeColor = FIRE_TYPE.reduce((map, fireType, index) => {
     map[fireType] = COLORS_FIRES[index];
@@ -107,13 +119,12 @@ async function displayTrucks(trucksJson) {
         map.removeLayer(truck);
     });
     listTrucksIcon = [];
-    // set up a color for each facilityRefID
-    const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
-    const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
-    const mapFacilityRefIDColor = new Map();
-    uniqueFacilityRefID.forEach((facilityRefID, index) => {
-        mapFacilityRefIDColor.set(facilityRefID, COLORS_TRUCKS[index]);
-    });
+    // // set up a color for each facilityRefID
+    // const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
+    // const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
+    // uniqueFacilityRefID.forEach((facilityRefID, index) => {
+    //     mapFacilityRefIDColor.set(facilityRefID, COLORS_TRUCKS[index]);
+    // });
 
     // fetch truck icon as svg string to create a marker icon
     const truckSvgStringBase64 = await getImageString('/image/svg/truck.svg');
@@ -134,6 +145,28 @@ async function displayTrucks(trucksJson) {
     });
 }
 
+async function displayFacility(facilityJson) {
+    listFacilityIcon.forEach(facility => {
+        map.removeLayer(facility);
+    });
+    listFacilityIcon = [];
+
+    const facilitySvgStringBase64 = await getImageString('/image/svg/facility.svg');
+    const facilitySvg = atob(facilitySvgStringBase64.split(',')[1]);
+    const facilityIcon = createMarkerIconFromSvgString("blue", facilitySvg);
+
+    facilityJson.forEach(facility => {
+        const color = mapFacilityRefIDColor.get(facility.id) || "blue";
+        facilityIcon.options.className = color + "Facility facility";
+        const marker = L.marker([facility.lat, facility.lon], {icon: facilityIcon}).addTo(map);
+        listFacilityIcon.push(marker);
+        let desc = "";
+        for (const [key, value] of Object.entries(facility)) {
+            desc += `<b>${key}: ${value}</b><br>`;
+        }
+        marker.bindPopup(desc);
+    });
+}
 
 /**
  * @description Display all fires on the map.
@@ -167,6 +200,7 @@ export {
     displayFires,
     getImageString,
     displayLimitSquare,
-    removeLimitSquare
+    removeLimitSquare,
+    displayFacility
 }
 

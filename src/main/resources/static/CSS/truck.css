@@ -4,38 +4,38 @@
 }
 
 /******** all colors of trucks *******/
-.redTruck .st2 {
+.redTruck .st2, .redTruck .st3 {
     fill: red;
 }
 
-.blueTruck .st2 {
+.blueTruck .st2, .blueTruck .st3 {
     fill: blue;
 }
 
-.greenTruck .st2 {
+.greenTruck .st2, .greenTruck .st3 {
     fill: green;
 }
 
-.goldTruck .st2 {
+.goldTruck .st2, .goldTruck .st3 {
     fill: gold;
 }
 
-.orangeTruck .st2 {
+.orangeTruck .st2, .orangeTruck .st3 {
     fill: orange;
 }
 
-.violetTruck .st2 {
+.violetTruck .st2, .violetTruck .st3 {
     fill: violet;
 }
 
-.blackTruck .st2 {
+.blackTruck .st2, .blackTruck .st3 {
     fill: black;
 }
 
-.greyTruck .st2 {
+.greyTruck .st2, .greyTruck .st3 {
     fill: grey;
 }
 
-.yellowTruck .st2 {
+.yellowTruck .st2, .yellowTruck .st3 {
     fill: yellow;
 }
