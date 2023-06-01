@@ -2,9 +2,9 @@ import {COLORS_FIRES, COLORS_TRUCKS, FIRE_TYPE} from "./EnumValues.js";
 import {getAllFacilities} from "./httpApi.js";
 
 let listFiresIcon = [];
-let listTrucksIcon = [];
 let listFacilityIcon = [];
 let mapFacilityRefIDColor = new Map();
+let mapTruckJsonIcon = new Map();
 // setup color by facility refID
 getAllFacilities(setupColorByFacilityRefID, (err) => console.log(err));
 let color = "blue";
@@ -93,7 +93,7 @@ function getImageString(url) {
  * @description Create a marker icon from a svg string.
  * @param color the color of the icon
  * @param svgString the svg file as string
- * @returns {L.DivIcon}
+ * @returns L.divIcon the icon to display on the map
  * @todo make the type of the truck as a parameter, same goes for the class
  */
 function createMarkerIconFromSvgString(color, svgString) {
@@ -115,28 +115,34 @@ function createMarkerIconFromSvgString(color, svgString) {
  * @returns {Promise<void>}
  */
 async function displayTrucks(trucksJson) {
-    listTrucksIcon.forEach(truck => {
-        map.removeLayer(truck);
-    });
-    listTrucksIcon = [];
-    // // set up a color for each facilityRefID
-    // const listFacilityRefID = trucksJson.map(truck => truck.facilityRefID);
-    // const uniqueFacilityRefID = [...new Set(listFacilityRefID)];
-    // uniqueFacilityRefID.forEach((facilityRefID, index) => {
-    //     mapFacilityRefIDColor.set(facilityRefID, COLORS_TRUCKS[index]);
-    // });
+    if (mapTruckJsonIcon.size !== 0) {
+        // look for trucks that have moved
+        // TODO this filter part doesn't work (trucks are blinking without moving)
+        let currentTrucks = Array.from(mapTruckJsonIcon.entries());
+        trucksJson.filter((truck, index, array) => {
+            currentTrucks.forEach(currentTruckJsonIcon => {
+                if (truck.facilityRefID === currentTruckJsonIcon[0].facilityRefID && (truck.lon !== currentTruckJsonIcon[0].lon || truck.lat !== currentTruckJsonIcon[0].lat)) {
+                    // the truck has moved, we remove it from the map
+                    mapTruckJsonIcon.delete(currentTruckJsonIcon[0]);
+                    map.removeLayer(currentTruckJsonIcon[1]);
+                    // return the truck for further processing
+                    return truck;
+                }
+            })
+        })
+    }
 
     // fetch truck icon as svg string to create a marker icon
     const truckSvgStringBase64 = await getImageString('/image/svg/truck.svg');
     const truckSvg = atob(truckSvgStringBase64.split(',')[1]);
     const truckIcon = createMarkerIconFromSvgString("blue", truckSvg);
 
-    // display each trucks on the map
+    // display each remaining trucks on the map
     trucksJson.forEach(truck => {
         color = mapFacilityRefIDColor.get(truck.facilityRefID) || "blue";
         truckIcon.options.className = color + "Truck";
         const marker = L.marker([truck.lat, truck.lon], {icon: truckIcon,}).addTo(map);
-        listTrucksIcon.push(marker);
+        mapTruckJsonIcon.set(truck, marker);
         let desc = "";
         for (const [key, value] of Object.entries(truck)) {
             desc += `<b>${key}: ${value}</b><br>`;
