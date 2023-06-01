@@ -47,7 +47,7 @@ public class BotManager {
 
     @Scheduled(fixedRate = updateSpeed)
     public void process() {
-        RequestsUtils.info("BotManager process: " + this.bots.size() + " bots");
+        //RequestsUtils.info("BotManager process: " + this.bots.size() + " bots");
         for (Bot bot : this.bots.values()) {
             RequestsUtils.info("Bot " + bot.getId());
             if (!bot.run()) {

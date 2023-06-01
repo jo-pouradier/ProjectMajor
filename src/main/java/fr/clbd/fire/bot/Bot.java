@@ -9,7 +9,7 @@ import lombok.Getter;
 
 public class Bot {
 
-    private static final float simulationSpeed = 4.0f;
+    private static final float simulationSpeed = 8.0f;
 
     @Getter
     private Vehicle vehicle;

@@ -417,16 +417,25 @@ public class RequestsUtils {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Trajet retour = new Trajet(0, new Coord(truckDto.getLon(), truckDto.getLat()), new Coord(ownedFacilityDto.getLon(), ownedFacilityDto.getLat()));
+        info("-------------------");
+        info("-------------------");
+        info("-------------------");
+        info("-------------------");
+        info("-------------------");
+        info("-------------------");
+        info("-------------------");
+        info("-------------------");
+        Trajet retour = new Trajet(0, new Coord(bot.getVehicle().getLon(), bot.getVehicle().getLat()), new Coord(ownedFacilityDto.getLon(), ownedFacilityDto.getLat()));
         bot.setTrajet(retour);
         try {
             while(bot.getTrajet() != null) {
-                RequestsUtils.info("Bot size: "+BotManager.getInstance().getBots().size());
                 Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        bot.getVehicle().setOptimizedLiquid(FireType.D_Metals);
+        updateVehicle(bot.getVehicle().getId(), bot.getVehicle().toDto());
     }
 
     public static void moveToCoordInThread(Coord fire, VehicleDto vehicleDto) {
