@@ -257,8 +257,8 @@ public class RequestsUtils {
         return Boolean.TRUE.equals(makeRequest("/vehicle" + uuid, HttpMethod.DELETE, null, Boolean.class));
     }
 
-    public static boolean delVehicle(int id, int teamUuid) {
-        return Boolean.TRUE.equals(makeRequest("/vehicle/" + teamUuid + '/' + id, HttpMethod.DELETE, null, Boolean.class));
+    public static boolean delVehicle(int id) {
+        return Boolean.TRUE.equals(makeRequest("/vehicle/" + uuid + '/' + id, HttpMethod.DELETE, null, Boolean.class));
     }
 
     public static Coord getCoord(double lon, double lat) {
