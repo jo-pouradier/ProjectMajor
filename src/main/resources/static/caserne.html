@@ -24,11 +24,33 @@
             liquide type : {{liquideType}} liquide quantity : {{liquideQuantity}} <br>
             Fuel : {{fuel}}  Crew member : {{crewMember}} <br>
             FacilityRefId : {{facilityRefId}}
+            <button onclick="deleteCamion({{id}})">Delete</button>
         </h3>
 
       </div>
     </template>
   </div>
-</div>
+
+    <div class="grid-container" id="form">
+  <input type="text" id="FacilityRefID" placeholder="FacilityRefID">
+  <select id="type">
+      <option value="CAR">CAR</option>
+      <option value="FIRE_ENGINE">FIRE_ENGINE</option>
+      <option value="PUMPER_TRUCK">PUMPER_TRUCK</option>
+      <option value="WATER_TENDER">WATER_TENDER</option>
+      <option value="TRUCK">TRUCK</option>
+      <option value="TURNTABLE_LADDER_TRUCK">TURNTABLE_LADDER_TRUCK</option>
+  </select>
+  <select id="liquidType">
+      <option value="WATER">WATER</option>
+      <option value="FOAM">FOAM</option>
+      <option value="POWDER">POWDER</option>
+      <option value="SPECIAL_POWDER">SPECIAL_POWDER</option>
+      <option value="CARBON_DIOXYDE">CARBON_DIOXYDE</option>
+      <option value="ALL">ALL</option>
+  </select>
+  <button id="btnSubmit" onclick="createCamion()">Créer Truck</button>
+    </div>
+  </div>
 </body>
 </html>
