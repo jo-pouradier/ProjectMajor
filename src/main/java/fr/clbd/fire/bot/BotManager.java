@@ -1,5 +1,6 @@
 package fr.clbd.fire.bot;
 
+import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import fr.clbd.fire.model.Vehicle;
 import fr.clbd.fire.service.FireService;

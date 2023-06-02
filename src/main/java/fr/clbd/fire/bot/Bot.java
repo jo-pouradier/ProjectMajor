@@ -15,7 +15,7 @@ import lombok.Getter;
 
 public class Bot {
 
-    private static final float simulationSpeed = 15.0f;
+    private static final float simulationSpeed = 10.0f;
 
     @Getter
     private Vehicle vehicle;
@@ -106,7 +106,9 @@ public class Bot {
         FireDto[] fireDtos = RequestsUtils.getAllFires();
         // exclude fires electric
         fireDtos = Arrays.asList(fireDtos).stream().filter(fireDto -> !fireDto.getType().equals(FireType.E_Electric.toString())).toArray(FireDto[]::new);
-
+        if (fireDtos.length == 0) {
+            return null;
+        }
         double closestDistance = Double.MAX_VALUE;
         FireDto closestFire = null;
         for (FireDto fireDto : fireDtos) {
