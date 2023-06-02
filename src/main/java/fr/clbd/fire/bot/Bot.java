@@ -1,8 +1,10 @@
 package fr.clbd.fire.bot;
 
 import com.project.model.dto.Coord;
+import com.project.model.dto.FireDto;
 import com.project.model.dto.VehicleDto;
 import fr.clbd.fire.model.Vehicle;
+import fr.clbd.fire.service.FireService;
 import fr.clbd.fire.utils.RequestsUtils;
 import fr.clbd.fire.utils.Trajet;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import lombok.Getter;
 public class Bot {
 
     private static final float simulationSpeed = 8.0f;
+    private static final FireService fireService = new FireService();
 
     @Getter
     private Vehicle vehicle;
@@ -66,6 +69,12 @@ public class Bot {
     public static Bot fromDto(BotDto botDto) {
         return new Bot(botDto.getId(), Vehicle.fromDto(botDto.getVehicleDto()));
     }
+
+    public Trajet createTrajetToFire(){
+        FireDto fire = fireService.getAllFires()[0];
+         return new Trajet(fire.getId(),new Coord(this.getVehicle().getLon(), this.getVehicle().getLat()),new Coord(fire.getLon(), fire.getLat()));
+    }
+
 
     public void setTrajet(Trajet trajet) {
         this.trajet = trajet;

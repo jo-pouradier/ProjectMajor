@@ -405,11 +405,12 @@ public class RequestsUtils {
         VehicleDto truckDto = getVehicle(3799);
         FacilityDto ownedFacilityDto = getFacility(truckDto.getFacilityRefID());
 
-        FacilityDto cibledFacility = getFacility(6);
+        //FacilityDto cibledFacility = getFacility(6);
 
-        Trajet allee = new Trajet(0, new Coord(truckDto.getLon(), truckDto.getLat()), new Coord(cibledFacility.getLon(), cibledFacility.getLat()));
+        //Trajet allee = new Trajet(0, new Coord(truckDto.getLon(), truckDto.getLat()), new Coord(cibledFacility.getLon(), cibledFacility.getLat()));
         Bot bot = BotManager.getInstance().createBot(truckDto);
-        bot.setTrajet(allee);
+        //test bot avce vrai coord de feu
+        bot.setTrajet(bot.createTrajetToFire());
         try {
             while(bot.getTrajet() != null) {
                 Thread.sleep(100);
