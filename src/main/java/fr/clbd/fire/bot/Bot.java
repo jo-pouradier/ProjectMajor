@@ -8,6 +8,7 @@ import com.project.model.dto.FireDto;
 import com.project.model.dto.FireType;
 import com.project.model.dto.VehicleDto;
 import fr.clbd.fire.model.Vehicle;
+import fr.clbd.fire.service.FireService;
 import fr.clbd.fire.utils.RequestsUtils;
 import fr.clbd.fire.utils.Trajet;
 import lombok.Getter;
