@@ -3,3 +3,5 @@
 /FireApp.iml
 fire_token
 google_route_api_key
+.idea/*
+.idea/misc.xml

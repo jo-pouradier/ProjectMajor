@@ -279,7 +279,7 @@ public class RequestsUtils {
     }
 
     public static VehicleDto moveVehicle(int id, Coord coord) {
-        return makeRequest("/vehicle/move/" + uuid + "/" + id, HttpMethod.PUT, coord, VehicleDto.class);
+        return makeRequest("/vehicle/move/" + uuid + "/" + id, HttpMethod.PUT, CoordLite.fromCoord(coord), VehicleDto.class);
     }
 
     public static VehicleDto moveVehicle(int id, VehicleDto vehicleDto) {
@@ -410,7 +410,7 @@ public class RequestsUtils {
         //Trajet allee = new Trajet(0, new Coord(truckDto.getLon(), truckDto.getLat()), new Coord(cibledFacility.getLon(), cibledFacility.getLat()));
         Bot bot = BotManager.getInstance().createBot(truckDto);
         //test bot avce vrai coord de feu
-        bot.setTrajet(bot.createTrajetToFire());
+        bot.setTrajet(new Trajet(0, new Coord(2.3488, 48.8534), new Coord(2.3488, 48.8534)));
         try {
             while(bot.getTrajet() != null) {
                 Thread.sleep(100);

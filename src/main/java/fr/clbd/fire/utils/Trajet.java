@@ -24,6 +24,7 @@ public class Trajet {
         this.distanceCumulee = new ArrayList<>();
         this.distanceCumulee.add(0.0f);
         this.coords = new ArrayList<>();
+        this.coords.add(start);
         int i = 1;
         for (StepDto step : this.steps) {
             List<Coord> intermediaire = RequestsUtils.decodePoly(step.getPolyline().getEncodedPolyline()).stream().map(LatLongDto::toCoord).collect(Collectors.toList());
@@ -33,10 +34,11 @@ public class Trajet {
 //                    step.getDistanceMeters());
             i++;
         }
+        this.coords.add(end);
         for (i = 1; i < this.coords.size(); i++) {
             distanceCumulee.add(distanceCumulee.get(i-1)+(float) (1000*RequestsUtils.getDistanceBetweenCoord(this.coords.get(i - 1), this.coords.get(i))));
         }
-        this.distance = RequestsUtils.calcRouteDistance(steps);
+        this.distance = distanceCumulee.get(distanceCumulee.size()-1);//RequestsUtils.calcRouteDistance(steps);
     }
 
     public Coord getStart() {
@@ -66,11 +68,15 @@ public class Trajet {
     public Coord getCoordAtDistance(float distance) {
         int index = 0;
         while (this.getDistanceAt(index) < distance) {
+            if (index >= this.distanceCumulee.size()) {
+                return this.getCoords(this.distanceCumulee.size() - 1);
+            }
             index++;
         }
         if (index == 0) {
             return this.getCoords(0);
         }
+        
         Coord before = getCoords(index - 1);
         Coord after = getCoords(index);
         double vector_lat = after.getLat() - before.getLat();
@@ -85,6 +91,9 @@ public class Trajet {
     }
 
     private float getDistanceAt(int index) {
+        if (index >= this.distanceCumulee.size()) {
+            return this.distanceCumulee.get(this.distanceCumulee.size() - 1);
+        }
         return this.distanceCumulee.get(index);
     }
 }

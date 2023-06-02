@@ -146,6 +146,8 @@ const getAllFacilities = (callback, err_callback) => {
         .catch(error => err_callback(error));
 }
 
+
+
 export {
     getAllFire,
     getAllVehicle,
