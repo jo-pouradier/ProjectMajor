@@ -124,13 +124,21 @@ public class Vehicle {
 
     public static Vehicle fromDto(VehicleDto vehicleDto){
         Vehicle vehicle = new Vehicle();
+        if (vehicleDto == null){
+            return vehicle;
+        }
         BeanUtils.copyProperties(vehicleDto, vehicle);
         return vehicle;
     }
 
 
     public void setOptimizedLiquid(FireType fireType) {
-        LiquidType best = LiquidType.ALL;
+        this.setLiquidType(getOptimizedLiquid(fireType));
+        // this.setLiquidType(LiquidType.WATER);
+    }
+
+    public LiquidType getOptimizedLiquid(FireType fireType) {
+        LiquidType best = LiquidType.WATER;
         float bestRatio = 0;
         for(LiquidType type : LiquidType.values()){
             float ratio = type.getEfficiency(fireType.toString());
@@ -139,7 +147,7 @@ public class Vehicle {
                 bestRatio = ratio;
             }
         }
-        this.setLiquidType(best);
+        return best;
     }
 
 
@@ -165,7 +173,7 @@ public class Vehicle {
         setFuel(getType().getFuelCapacity());
     }
 
-    public float efficiency(FireType fireType){
+    public float getEfficiency(FireType fireType){
         return getType().getEfficiency()*getLiquidType().getEfficiency(fireType.toString());
     }
 }

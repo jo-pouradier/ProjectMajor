@@ -3,3 +3,11 @@
 /FireApp.iml
 fire_token
 google_route_api_key
+/.apt_generated/
+/.apt_generated_tests/
+.classpath
+.gitignore
+.settings/*
+.idea/*
+.idea/misc.xml
+.project

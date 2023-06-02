@@ -279,7 +279,7 @@ public class RequestsUtils {
     }
 
     public static VehicleDto moveVehicle(int id, Coord coord) {
-        return makeRequest("/vehicle/move/" + uuid + "/" + id, HttpMethod.PUT, coord, VehicleDto.class);
+        return makeRequest("/vehicle/move/" + uuid + "/" + id, HttpMethod.PUT, CoordLite.fromCoord(coord), VehicleDto.class);
     }
 
     public static VehicleDto moveVehicle(int id, VehicleDto vehicleDto) {
