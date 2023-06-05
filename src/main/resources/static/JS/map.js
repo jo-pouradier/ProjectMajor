@@ -7,7 +7,7 @@ const vehicleTimeUpdate = 1000;
 const facilityTimeUpdate = 10000;
 
 getAllVehicle(displayTrucks, (err) => console.log(err));
-//getAllFire(displayFires, (err) => console.log(err));
+getAllFire(displayFirePos, (err) => console.log(err));
 console.log("test");
 getAllFacilities(displayFacility, (err) => console.log(err));
 
