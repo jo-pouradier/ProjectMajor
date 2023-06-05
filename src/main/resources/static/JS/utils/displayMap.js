@@ -235,7 +235,7 @@ function createMarkerIcon(iconUrl) {
 
 async function displayFirePos(fireJson) {
     fireJson.forEach(fire => {
-        console.log(fire);
+        // console.log(fire);
         let color = mapFireTypeColor.get(fire.type) || "blue";
         const fireIcon = createMarkerIcon( `../images/${color}Fire.png`);
         fireIcon.options.className = "fire"; //add class to icon

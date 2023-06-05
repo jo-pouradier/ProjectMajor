@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   <title>FireAPP</title>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="module" src="JS/utils/httpApi.js"></script>
   <script src="JS/caserne.js"></script>
   <script src="JS/navBar.js"></script>
   <link rel="stylesheet" href="CSS/caserne.css">
@@ -25,6 +26,7 @@
             Fuel : {{fuel}}  Crew member : {{crewMember}} <br>
             FacilityRefId : {{facilityRefId}}
             <button onclick="deleteCamion({{id}})">Delete</button>
+            <button id="bot{{id}}" onclick="botCamion({{id}})">Bot</button>
         </h3>
 
       </div>
